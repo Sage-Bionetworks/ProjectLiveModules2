@@ -16,11 +16,14 @@ barchart_module_ui <- function(id){
 
 }
 
-#' Barchart Module UI
+#' Barchart Module Server
 #'
 #' @param id A shiny id
 #' @param data A data frame
-#' @param config A named list
+#' @param config A named list. All values must be columns in data:
+#'  - "x_attribute" (required)
+#'  - "color_attribute"
+#'  - "group_attribute"
 #'
 #' @export
 barchart_module_server <- function(id, data, config){
@@ -31,11 +34,15 @@ barchart_module_server <- function(id, data, config){
 
       output$plot <- plotly::renderPlotly({
         shiny::req(data(), config())
-        if(config()$group_attribute != "none" && config()$color_attribute != "none"){
+
+        plot_is_grouped <- !is.null(config()$group_attribute)
+        plot_is_stacked <- !is.null(config()$color_attribute)
+
+        if(plot_is_grouped && plot_is_stacked){
           return(create_stacked_grouped_barchart(data(), config()))
-        } else if(config()$group_attribute != "none"){
+        } else if(plot_is_grouped){
           return(create_grouped_barchart(data(), config()))
-        } else if (config()$color_attribute != "none") {
+        } else if (plot_is_stacked) {
           return(create_stacked_barchart(data(), config()))
         } else{
           return(create_standard_barchart(data(), config()))

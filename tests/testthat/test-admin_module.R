@@ -7,12 +7,9 @@ data <-
   readRDS() %>%
   purrr::pluck("Files")
 
-expected_config <- list(
-  "type" = "datatable",
-  "entity" = "Files"
-)
 
-test_that("admin_module_server", {
+
+test_that("admin_module_server_datatable", {
   shiny::testServer(
     admin_module_server,
     args = list(
@@ -24,7 +21,37 @@ test_that("admin_module_server", {
 
       expect_equal(
         session$getReturned()(),
-        expected_config
+        list(
+          "type" = "datatable",
+          "entity" = "Files"
+        )
+      )
+    }
+  )
+})
+
+test_that("admin_module_server_barchart", {
+  shiny::testServer(
+    admin_module_server,
+    args = list(
+      "data" = shiny::reactive(data)
+    ),
+    {
+      session$setInputs("display_choice" = "Barchart")
+      session$setInputs("entity_choice" = "Files")
+      session$setInputs("barchart-x_attribute" = "assay")
+      session$setInputs("barchart-color_attribute" = "file_format")
+      session$setInputs("barchart-group_attribute" = "year")
+
+      expect_equal(
+        session$getReturned()(),
+        list(
+          "type" = "barchart",
+          "entity" = "Files",
+          "x_attribute" = "assay",
+          "group_attribute" = "year",
+          "color_attribute" = "file_format"
+        )
       )
     }
   )
