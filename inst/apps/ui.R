@@ -29,21 +29,12 @@ shinydashboard::dashboardPage(
         ),
         conditionalPanel(
           condition = "input.display_choice == 'Data Table'",
-          shiny::fluidRow(
-            shinydashboard::box(
-              width = 12,
-              solidHeader = TRUE,
-              status = "primary",
-              title = "Data Table",
-              DT::dataTableOutput("data_table")
-            )
-          )
+          admin_datatable_module_ui("datatable")
         ),
         conditionalPanel(
           condition = "input.display_choice == 'Barchart'",
           admin_barchart_module_ui("barchart")
         )
-
       )
     )
   )

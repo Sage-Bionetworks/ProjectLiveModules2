@@ -79,7 +79,7 @@ saveRDS(
     "Publications" = publications,
     "Tools" = tools
   ),
-  "inst/RDS/data.rds"
+  "tests/testthat/RDS/data.rds"
 )
 
 
