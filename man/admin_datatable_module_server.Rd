@@ -2,7 +2,7 @@
 % Please edit documentation in R/admin_datatable_module.R
 \name{admin_datatable_module_server}
 \alias{admin_datatable_module_server}
-\title{Admin Data Table Module UI}
+\title{Admin Data Table Module Server}
 \usage{
 admin_datatable_module_server(id, data, entity)
 }
@@ -14,5 +14,5 @@ admin_datatable_module_server(id, data, entity)
 \item{entity}{A string}
 }
 \description{
-Admin Data Table Module UI
+Admin Data Table Module Server
 }
