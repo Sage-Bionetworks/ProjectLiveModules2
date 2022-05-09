@@ -2,15 +2,17 @@
 % Please edit documentation in R/barchart_functions.R
 \name{create_stacked_barchart}
 \alias{create_stacked_barchart}
-\title{Create StackedBarchart}
+\title{Create Stacked Barchart}
 \usage{
 create_stacked_barchart(data, config)
 }
 \arguments{
 \item{data}{A dataframe}
 
-\item{config}{A named list}
+\item{config}{A named list. All values must be columns in data:
+- "x_attribute" (required)
+- "color_attribute" (required)}
 }
 \description{
-Create StackedBarchart
+Create Stacked Barchart
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/barchart_module.R
 \name{barchart_module_server}
 \alias{barchart_module_server}
-\title{Barchart Module UI}
+\title{Barchart Module Server}
 \usage{
 barchart_module_server(id, data, config)
 }
@@ -11,8 +11,11 @@ barchart_module_server(id, data, config)
 
 \item{data}{A data frame}
 
-\item{config}{A named list}
+\item{config}{A named list. All values must be columns in data:
+- "x_attribute" (required)
+- "color_attribute"
+- "group_attribute"}
 }
 \description{
-Barchart Module UI
+Barchart Module Server
 }
