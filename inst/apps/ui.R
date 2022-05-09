@@ -44,24 +44,6 @@ shinydashboard::dashboardPage(
           admin_barchart_module_ui("barchart")
         )
 
-        # conditionalPanel(
-        #   condition = "input.display_choice == 'Barchart'",
-        #   shiny::fluidRow(
-        #     shinydashboard::box(
-        #       width = 12,
-        #       solidHeader = TRUE,
-        #       status = "warning",
-        #       title = "Barchart Controls",
-        #       shiny::uiOutput("barchart_x_attribute_ui"),
-        #       shiny::uiOutput("barchart_color_attribute_ui"),
-        #       shiny::uiOutput("barchart_group_attribute_ui")
-        #     )
-        #   )
-        # ),
-        # conditionalPanel(
-        #   condition = "input.display_choice == 'Barchart'",
-          # shiny::fluidRow(barchart_module_ui("barchart"))
-        # )
       )
     )
   )
