@@ -1,3 +1,7 @@
+#' Create Standard Barchart
+#'
+#' @param data A data frame
+#' @param config A named list
 create_standard_barchart <- function(data, config){
   data %>%
     dplyr::select("x" = config$x_attribute) %>%
@@ -6,6 +10,10 @@ create_standard_barchart <- function(data, config){
     plotly_bar(text_col = "y")
 }
 
+#' Create StackedBarchart
+#'
+#' @param data A dataframe
+#' @param config A named list
 create_stacked_barchart <- function(data, config){
   data %>%
     dplyr::select(
@@ -17,6 +25,10 @@ create_stacked_barchart <- function(data, config){
     plotly_bar(color_col = "color", text_col = "y")
 }
 
+#' Create Grouped Barchart
+#'
+#' @param data A dataframe
+#' @param config A named list
 create_grouped_barchart <- function(data, config){
   data %>%
     dplyr::select(
@@ -38,6 +50,10 @@ create_grouped_barchart <- function(data, config){
     plotly::layout(yaxis = list(title = "Count"))
 }
 
+#' Create Stacked Grouped Barchart
+#'
+#' @param data A dataframe
+#' @param config A named list
 create_stacked_grouped_barchart <- function(data, config){
   data %>%
     dplyr::select(
@@ -61,14 +77,11 @@ create_stacked_grouped_barchart <- function(data, config){
     plotly::layout(yaxis = list(title = "Count"))
 }
 
-
-
 #' Plotly Bar
 #'
 #' @param plot_data A dataframe
 #' @param x_col A string
 #' @param y_col A string
-#' @param error_col A string or NA
 #' @param color_col A string or NA
 #' @param key_col A string or NA
 #' @param text_col A string or NA
@@ -77,10 +90,9 @@ create_stacked_grouped_barchart <- function(data, config){
 #' @param title A string
 #' @param source_name A string or NULL
 #' @param bar_colors A string or NULL
+#' @param showlegend True or False
 #'
 #' @importFrom magrittr %>%
-#'
-#' @export
 plotly_bar <- function(
     plot_data,
     x_col = "x",
@@ -93,7 +105,6 @@ plotly_bar <- function(
     title = "",
     source_name = NULL,
     bar_colors = NULL,
-    format_func = NULL,
     showlegend = TRUE
 ) {
 

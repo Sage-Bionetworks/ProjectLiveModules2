@@ -1,3 +1,8 @@
+#' Admin Barchart Module UI
+#'
+#' @param id A shiny id
+#'
+#' @export
 admin_barchart_module_ui <- function(id){
   ns <- shiny::NS(id)
 
@@ -19,6 +24,13 @@ admin_barchart_module_ui <- function(id){
 }
 
 
+#' Admin Barchart Module UI
+#'
+#' @param id A shiny id
+#' @param data A data frame
+#' @param entity A string
+#'
+#' @export
 admin_barchart_module_server <- function(id, data, entity){
   shiny::moduleServer(
     id,

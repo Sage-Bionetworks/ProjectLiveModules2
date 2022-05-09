@@ -16,7 +16,6 @@ plotly_bar(
   title = "",
   source_name = NULL,
   bar_colors = NULL,
-  format_func = NULL,
   showlegend = TRUE
 )
 }
@@ -43,7 +42,7 @@ plotly_bar(
 
 \item{bar_colors}{A string or NULL}
 
-\item{error_col}{A string or NA}
+\item{showlegend}{True or False}
 }
 \description{
 Plotly Bar

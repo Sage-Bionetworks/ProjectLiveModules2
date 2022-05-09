@@ -1,3 +1,8 @@
+#' Barchart Module UI
+#'
+#' @param id A shiny id
+#'
+#' @export
 barchart_module_ui <- function(id){
   ns <- shiny::NS(id)
 
@@ -11,7 +16,13 @@ barchart_module_ui <- function(id){
 
 }
 
-
+#' Barchart Module UI
+#'
+#' @param id A shiny id
+#' @param data A data frame
+#' @param config A named list
+#'
+#' @export
 barchart_module_server <- function(id, data, config){
   shiny::moduleServer(
     id,
