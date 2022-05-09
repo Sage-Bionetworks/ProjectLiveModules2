@@ -24,7 +24,7 @@ admin_barchart_module_ui <- function(id){
 }
 
 
-#' Admin Barchart Module UI
+#' Admin Barchart Module Server
 #'
 #' @param id A shiny id
 #' @param data A data frame

@@ -13,7 +13,7 @@ admin_datatable_module_ui <- function(id){
 }
 
 
-#' Admin Data Table Module UI
+#' Admin Data Table Module Server
 #'
 #' @param id A shiny id
 #' @param data A data frame
@@ -26,12 +26,13 @@ admin_datatable_module_server <- function(id, data, entity){
     function(input, output, session) {
       ns <- session$ns
 
-      config <- shiny::reactive(
+      config <- shiny::reactive({
+        shiny::req(entity())
         list(
           "type" = "datatable",
           "entity" = entity()
         )
-      )
+      })
 
       datatable_module_server(
         "datatable",
