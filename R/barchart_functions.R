@@ -2,6 +2,8 @@
 #'
 #' @param data A data frame
 #' @param config A named list
+#'
+#' @importFrom rlang .data
 create_standard_barchart <- function(data, config){
   data %>%
     dplyr::select("x" = config$x_attribute) %>%
@@ -14,6 +16,8 @@ create_standard_barchart <- function(data, config){
 #'
 #' @param data A dataframe
 #' @param config A named list
+#'
+#' @importFrom rlang .data
 create_stacked_barchart <- function(data, config){
   data %>%
     dplyr::select(
@@ -29,6 +33,8 @@ create_stacked_barchart <- function(data, config){
 #'
 #' @param data A dataframe
 #' @param config A named list
+#'
+#' @importFrom rlang .data
 create_grouped_barchart <- function(data, config){
   data %>%
     dplyr::select(
@@ -54,6 +60,8 @@ create_grouped_barchart <- function(data, config){
 #'
 #' @param data A dataframe
 #' @param config A named list
+#'
+#' @importFrom rlang .data
 create_stacked_grouped_barchart <- function(data, config){
   data %>%
     dplyr::select(
