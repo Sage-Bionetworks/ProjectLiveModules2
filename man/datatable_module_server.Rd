@@ -9,10 +9,10 @@ datatable_module_server(id, config, data)
 \arguments{
 \item{id}{A shiny id}
 
-\item{config}{A named list. All values must be columns in data:
-- "name": shinydashboard::box box title}
+\item{config}{A shiny::reactive that returns a named list:
+- "name": a title for the shinydashboard::box}
 
-\item{data}{A data frame}
+\item{data}{A shiny::reactive that returns A data frame.}
 }
 \description{
 Data Table Module UI

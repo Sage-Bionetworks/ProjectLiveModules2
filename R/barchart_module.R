@@ -19,9 +19,9 @@ barchart_module_ui <- function(id){
 #' Barchart Module Server
 #'
 #' @param id A shiny id
-#' @param data A data frame
-#' @param config A named list. All values must be columns in data:
-#'  - "name": shinydashboard::box box title
+#' @param data A shiny::reactive that returns A data frame.
+#' @param config A shiny::reactive that returns a named list:
+#'  - "name": a title for the shinydashboard::box
 #'  - "x_attribute": Column in data param (required)
 #'  - "color_attribute": Column in data param
 #'  - "group_attribute": Column in data param

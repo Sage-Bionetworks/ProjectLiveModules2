@@ -9,10 +9,10 @@ barchart_module_server(id, data, config)
 \arguments{
 \item{id}{A shiny id}
 
-\item{data}{A data frame}
+\item{data}{A shiny::reactive that returns A data frame.}
 
-\item{config}{A named list. All values must be columns in data:
-- "name": shinydashboard::box box title
+\item{config}{A shiny::reactive that returns a named list:
+- "name": a title for the shinydashboard::box
 - "x_attribute": Column in data param (required)
 - "color_attribute": Column in data param
 - "group_attribute": Column in data param}

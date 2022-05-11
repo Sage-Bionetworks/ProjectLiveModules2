@@ -19,9 +19,9 @@ datatable_module_ui <- function(id){
 #' Data Table Module UI
 #'
 #' @param id A shiny id
-#' @param data A data frame
-#' @param config A named list. All values must be columns in data:
-#'  - "name": shinydashboard::box box title
+#' @param data A shiny::reactive that returns A data frame.
+#' @param config A shiny::reactive that returns a named list:
+#'  - "name": a title for the shinydashboard::box
 #'
 #' @export
 datatable_module_server <- function(id, config, data){

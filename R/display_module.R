@@ -25,7 +25,11 @@ display_module_ui <- function(id){
 #'
 #' @param id A shiny id
 #' @param data A shiny::reactive that returns a named list of data frames.
-#' @param config A shiny::reactive that returns a named list.
+#' @param config A shiny::reactive that returns a named list:
+#'  - "type": one of c("datatable", "barchart")
+#'  - "entity": a name in data
+#'  -  other attributes: see barchart_module_server() and
+#'  datatable_module_server()
 #'
 #' @export
 display_module_server <- function(id, config, data){
