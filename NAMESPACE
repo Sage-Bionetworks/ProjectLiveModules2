@@ -2,7 +2,13 @@
 
 export(admin_barchart_module_server)
 export(admin_barchart_module_ui)
+export(admin_datatable_module_server)
+export(admin_datatable_module_ui)
+export(admin_module_server)
+export(admin_module_ui)
 export(barchart_module_server)
 export(barchart_module_ui)
+export(datatable_module_server)
+export(datatable_module_ui)
 importFrom(magrittr,"%>%")
 importFrom(rlang,.data)

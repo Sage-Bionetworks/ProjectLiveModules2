@@ -1,7 +1,33 @@
+#' Create Barchart Config
+#'
+#' @param entity A string
+#' @param x_attribute A stirng
+#' @param group_attribute A string
+#' @param color_attribute A string
+create_barchart_config <- function(
+    entity, x_attribute, group_attribute, color_attribute
+){
+  config <- list(
+    "type" = "barchart",
+    "entity" = entity,
+    "x_attribute" = x_attribute
+  )
+
+  if(group_attribute != "none") {
+    config <- c(config, list("group_attribute" = group_attribute))
+  }
+  if(color_attribute != "none") {
+    config <- c(config, list("color_attribute" = color_attribute))
+  }
+
+  return(config)
+}
+
 #' Create Standard Barchart
 #'
 #' @param data A data frame
-#' @param config A named list
+#' @param config A named list. All values must be columns in data:
+#'  - "x_attribute" (required)
 #'
 #' @importFrom rlang .data
 create_standard_barchart <- function(data, config){
@@ -9,13 +35,15 @@ create_standard_barchart <- function(data, config){
     dplyr::select("x" = config$x_attribute) %>%
     tidyr::drop_na() %>%
     dplyr::count(.data$x, name = "y") %>%
-    plotly_bar(text_col = "y")
+    create_plotly_barchart(text_col = "y")
 }
 
-#' Create StackedBarchart
+#' Create Stacked Barchart
 #'
 #' @param data A dataframe
-#' @param config A named list
+#' @param config A named list. All values must be columns in data:
+#'  - "x_attribute" (required)
+#'  - "color_attribute" (required)
 #'
 #' @importFrom rlang .data
 create_stacked_barchart <- function(data, config){
@@ -26,13 +54,15 @@ create_stacked_barchart <- function(data, config){
     ) %>%
     tidyr::drop_na() %>%
     dplyr::count(.data$x, .data$color, name = "y") %>%
-    plotly_bar(color_col = "color", text_col = "y")
+    create_plotly_barchart(color_col = "color", text_col = "y")
 }
 
 #' Create Grouped Barchart
 #'
 #' @param data A dataframe
-#' @param config A named list
+#' @param config A named list. All values must be columns in data:
+#'  - "x_attribute" (required)
+#'  - "group_attribute" (required)
 #'
 #' @importFrom rlang .data
 create_grouped_barchart <- function(data, config){
@@ -45,7 +75,7 @@ create_grouped_barchart <- function(data, config){
     dplyr::count(.data$x, .data$group, name = "y") %>%
     dplyr::group_by(.data$group) %>%
     dplyr::group_map(
-      ~ plotly_bar(
+      ~ create_plotly_barchart(
         plot_data = .,
         text_col = "y",
         xlab = .y$group,
@@ -59,7 +89,10 @@ create_grouped_barchart <- function(data, config){
 #' Create Stacked Grouped Barchart
 #'
 #' @param data A dataframe
-#' @param config A named list
+#' @param config A named list. All values must be columns in data:
+#'  - "x_attribute" (required)
+#'  - "color_attribute" (required)
+#'  - "group_attribute" (required)
 #'
 #' @importFrom rlang .data
 create_stacked_grouped_barchart <- function(data, config){
@@ -73,7 +106,7 @@ create_stacked_grouped_barchart <- function(data, config){
     dplyr::count(.data$x, .data$group, .data$color, name = "y") %>%
     dplyr::group_by(.data$group) %>%
     dplyr::group_map(
-      ~ plotly_bar(
+      ~ create_plotly_barchart(
         plot_data = .,
         color_col = "color",
         text_col = "y",
@@ -85,7 +118,7 @@ create_stacked_grouped_barchart <- function(data, config){
     plotly::layout(yaxis = list(title = "Count"))
 }
 
-#' Plotly Bar
+#' Create Plotly Barchart
 #'
 #' @param plot_data A dataframe
 #' @param x_col A string
@@ -96,12 +129,11 @@ create_stacked_grouped_barchart <- function(data, config){
 #' @param xlab A string
 #' @param ylab A string
 #' @param title A string
-#' @param source_name A string or NULL
 #' @param bar_colors A string or NULL
 #' @param showlegend True or False
 #'
 #' @importFrom magrittr %>%
-plotly_bar <- function(
+create_plotly_barchart <- function(
     plot_data,
     x_col = "x",
     y_col = "y",
@@ -111,7 +143,6 @@ plotly_bar <- function(
     xlab = "",
     ylab = "",
     title = "",
-    source_name = NULL,
     bar_colors = NULL,
     showlegend = TRUE
 ) {
@@ -142,7 +173,6 @@ plotly_bar <- function(
     textposition = 'none',
     key = ~key,
     type = "bar",
-    source = source_name,
     colors = bar_colors,
     hoverinfo = "text"
   ) %>%

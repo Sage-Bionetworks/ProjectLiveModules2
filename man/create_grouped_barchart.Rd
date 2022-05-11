@@ -9,7 +9,9 @@ create_grouped_barchart(data, config)
 \arguments{
 \item{data}{A dataframe}
 
-\item{config}{A named list}
+\item{config}{A named list. All values must be columns in data:
+- "x_attribute" (required)
+- "group_attribute" (required)}
 }
 \description{
 Create Grouped Barchart

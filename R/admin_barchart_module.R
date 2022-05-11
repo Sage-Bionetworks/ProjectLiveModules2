@@ -24,7 +24,7 @@ admin_barchart_module_ui <- function(id){
 }
 
 
-#' Admin Barchart Module UI
+#' Admin Barchart Module Server
 #'
 #' @param id A shiny id
 #' @param data A data frame
@@ -102,15 +102,17 @@ admin_barchart_module_server <- function(id, data, entity){
 
       config <- shiny::reactive({
         shiny::req(
+          entity(),
           input$x_attribute,
           input$group_attribute,
           input$color_attribute
         )
 
-        list(
-          "x_attribute"     = input$x_attribute,
-          "color_attribute" = input$color_attribute,
-          "group_attribute" = input$group_attribute
+        create_barchart_config(
+          entity(),
+          input$x_attribute,
+          input$group_attribute,
+          input$color_attribute
         )
       })
 

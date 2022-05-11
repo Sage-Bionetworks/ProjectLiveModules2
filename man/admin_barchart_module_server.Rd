@@ -2,7 +2,7 @@
 % Please edit documentation in R/admin_barchart_module.R
 \name{admin_barchart_module_server}
 \alias{admin_barchart_module_server}
-\title{Admin Barchart Module UI}
+\title{Admin Barchart Module Server}
 \usage{
 admin_barchart_module_server(id, data, entity)
 }
@@ -14,5 +14,5 @@ admin_barchart_module_server(id, data, entity)
 \item{entity}{A string}
 }
 \description{
-Admin Barchart Module UI
+Admin Barchart Module Server
 }

@@ -9,7 +9,8 @@ create_standard_barchart(data, config)
 \arguments{
 \item{data}{A data frame}
 
-\item{config}{A named list}
+\item{config}{A named list. All values must be columns in data:
+- "x_attribute" (required)}
 }
 \description{
 Create Standard Barchart
