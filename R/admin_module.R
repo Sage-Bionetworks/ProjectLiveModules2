@@ -15,7 +15,7 @@ admin_module_ui <- function(id){
         title = "Controls",
         shiny::uiOutput(ns("entity_selection_ui")),
         shiny::selectInput(
-          "display_choice",
+          ns("display_choice"),
           label = "Select How to display items.",
           choices = list("Barchart", "Data Table")
         )
@@ -23,12 +23,15 @@ admin_module_ui <- function(id){
     ),
     shiny::conditionalPanel(
       condition = "input.display_choice == 'Data Table'",
-      admin_datatable_module_ui(ns("datatable"))
+      admin_datatable_module_ui(ns("datatable")),
+      ns = ns
     ),
     shiny::conditionalPanel(
       condition = "input.display_choice == 'Barchart'",
-      admin_barchart_module_ui(ns("barchart"))
-    )
+      admin_barchart_module_ui(ns("barchart")),
+      ns = ns
+    ),
+    shiny::downloadButton(ns("download_json"), "Download JSON"),
   )
 
 }
@@ -76,6 +79,18 @@ admin_module_server <- function(id, data){
         if(input$display_choice == "Barchart") return(barchart_config())
         else if(input$display_choice == "Data Table") return(datatable_config())
       })
+
+      json_config <- shiny::reactive({
+        jsonlite::toJSON(config())
+      })
+
+      output$download_json <- shiny::downloadHandler(
+        filename = function() "test.json",
+        content = function(con) writeLines(
+          jsonlite::toJSON(config()),
+          con
+        )
+      )
 
       return(config)
 
