@@ -12,9 +12,10 @@ barchart_module_server(id, data, config)
 \item{data}{A data frame}
 
 \item{config}{A named list. All values must be columns in data:
-- "x_attribute" (required)
-- "color_attribute"
-- "group_attribute"}
+- "name": shinydashboard::box box title
+- "x_attribute": Column in data param (required)
+- "color_attribute": Column in data param
+- "group_attribute": Column in data param}
 }
 \description{
 Barchart Module Server

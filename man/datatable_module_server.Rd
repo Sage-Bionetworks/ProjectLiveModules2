@@ -4,14 +4,15 @@
 \alias{datatable_module_server}
 \title{Data Table Module UI}
 \usage{
-datatable_module_server(id, data, config)
+datatable_module_server(id, config, data)
 }
 \arguments{
 \item{id}{A shiny id}
 
-\item{data}{A data frame}
+\item{config}{A named list. All values must be columns in data:
+- "name": shinydashboard::box box title}
 
-\item{config}{A named list}
+\item{data}{A data frame}
 }
 \description{
 Data Table Module UI
