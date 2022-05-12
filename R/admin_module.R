@@ -66,7 +66,7 @@ admin_module_ui <- function(id){
 #' Admin Module Server
 #'
 #' @param id A shiny id
-#' @param data A named list of data frames
+#' @param data a shiny::reactive that returns a named list of data frames
 #'
 #' @export
 admin_module_server <- function(id, data){
@@ -104,6 +104,7 @@ admin_module_server <- function(id, data){
       })
 
       selected_input_config <- shiny::reactive({
+        if(input$config_method_choice == "none") return(NULL)
         shiny::req(config_list(), input$config_choice)
         lst <- purrr::keep(
           config_list(),
@@ -171,12 +172,14 @@ admin_module_server <- function(id, data){
       barchart_config <- admin_barchart_module_server(
         "barchart",
         selected_data,
+        selected_input_config,
         shiny::reactive(input$entity_choice)
       )
 
       datatable_config <- admin_datatable_module_server(
         "datatable",
         selected_data,
+        selected_input_config,
         shiny::reactive(input$entity_choice)
       )
 

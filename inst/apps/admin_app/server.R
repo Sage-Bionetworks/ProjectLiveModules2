@@ -4,10 +4,6 @@ server <- function(input, output) {
 
   data <- shiny::reactive(readRDS("../../../tests/testthat/RDS/data.rds"))
 
-  admin_module_server(
-    "admin",
-    data,
-    synapse_token
-  )
+  admin_module_server("admin", data)
 
 }

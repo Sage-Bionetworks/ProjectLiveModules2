@@ -17,7 +17,8 @@ test_that("admin_datatable_module_server", {
     admin_datatable_module_server,
     args = list(
       "data" = shiny::reactive(data),
-      "entity" = shiny::reactive("Files")
+      "entity" = shiny::reactive("Files"),
+      "config" = shiny::reactive(NULL)
     ),
     {
       expect_equal(

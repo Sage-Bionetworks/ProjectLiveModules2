@@ -16,11 +16,12 @@ admin_datatable_module_ui <- function(id){
 #' Admin Data Table Module Server
 #'
 #' @param id A shiny id
-#' @param data A data frame
-#' @param entity A string
+#' @param data A shiny::reactive that returns a data frame
+#' @param config A shiny::reactive that returns a named list or Null.
+#' @param entity A shiny::reactive that returns a string
 #'
 #' @export
-admin_datatable_module_server <- function(id, data, entity){
+admin_datatable_module_server <- function(id, data, config, entity){
   shiny::moduleServer(
     id,
     function(input, output, session) {

@@ -27,11 +27,12 @@ admin_barchart_module_ui <- function(id){
 #' Admin Barchart Module Server
 #'
 #' @param id A shiny id
-#' @param data A data frame
-#' @param entity A string
+#' @param data A shiny::reactive that returns a data frame
+#' @param input_config A shiny::reactive that returns a named list or Null.
+#' @param entity A shiny::reactive that returns a string
 #'
 #' @export
-admin_barchart_module_server <- function(id, data, entity){
+admin_barchart_module_server <- function(id, data, input_config, entity){
   shiny::moduleServer(
     id,
     function(input, output, session) {
@@ -39,68 +40,73 @@ admin_barchart_module_server <- function(id, data, entity){
 
       #TODO: replace this with schematic API call
       column_choices <- shiny::reactive({
-        shiny::req(entity())
-
-        entity_columns <- list(
-          "Files" = c(
-            "Assay" = "assay",
-            "Access Type" = "access_type",
-            "Year" = "year",
-            "Study ID" = "study_id"
-          ),
-          "Publications" = c(
-            "Assay" = "assay",
-            "Year" = "year",
-            "Study ID" = "study_id"
-          ),
-          "Tools" = c(
-            "Study ID" = "study_id"
-          ),
-          "Studies" = c(
-            "Initiative" = "initiative"
-          )
-        )
-
-        entity_columns %>%
-          purrr::pluck(entity())
+        shiny::req(data())
+        choices <- colnames(data())
+        names <- stringr::str_to_title(colnames(data()))
+        purrr::set_names(choices, names)
       })
 
+      x_attribute_default <- shiny::reactive({
+        get_value_from_list(input_config(), "x_attribute")
+      })
 
       output$x_attribute_ui <- shiny::renderUI({
-        shiny::req(column_choices)
+        shiny::req(
+          !is.null(x_attribute_default()),
+          column_choices()
+        )
         shiny::selectInput(
           inputId  = ns("x_attribute"),
           label    = "Select attribute to use as x column.",
-          choices  = column_choices()
+          choices  = column_choices(),
+          selected = x_attribute_default()
         )
       })
 
+      color_attribute_default <- shiny::reactive({
+        get_value_from_list(input_config(), "color_attribute")
+      })
+
       output$color_attribute_ui <- shiny::renderUI({
-        shiny::req(column_choices, input$x_attribute)
+        shiny::req(
+          !is.null(color_attribute_default()),
+          column_choices(),
+          input$x_attribute
+        )
         choices <- c("None" = "none", column_choices())
         choices <- choices[input$x_attribute != choices]
 
         shiny::selectInput(
           inputId  = ns("color_attribute"),
           label    = "Select attribute to use as barchart color.",
-          choices  = choices
+          choices  = choices,
+          selected = color_attribute_default()
         )
       })
 
+      group_attribute_default <- shiny::reactive({
+        get_value_from_list(input_config(), "group_attribute")
+      })
+
       output$group_attribute_ui <- shiny::renderUI({
-        shiny::req(column_choices, input$x_attribute)
+        shiny::req(
+          !is.null(group_attribute_default()),
+          column_choices(),
+          input$x_attribute
+        )
         choices <- c("None" = "none", column_choices())
         choices <- choices[input$x_attribute != choices]
 
         shiny::selectInput(
           inputId  = ns("group_attribute"),
           label    = "Select attribute to use as barchart grouping.",
-          choices  = choices
+          choices  = choices,
+          selected = group_attribute_default()
         )
       })
 
 
-      config <- shiny::reactive({
+      output_config <- shiny::reactive({
         shiny::req(
           entity(),
           input$x_attribute,
@@ -119,10 +125,10 @@ admin_barchart_module_server <- function(id, data, entity){
       barchart_module_server(
         "barchart",
         data,
-        config
+        output_config
       )
 
-      return(config)
+      return(output_config)
 
     }
   )
