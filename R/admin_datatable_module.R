@@ -35,9 +35,9 @@ admin_datatable_module_server <- function(id, data, entity){
       })
 
       datatable_module_server(
-        "datatable",
-        data,
-        config
+        id = "datatable",
+        config = config,
+        data = data
       )
 
       return(config)

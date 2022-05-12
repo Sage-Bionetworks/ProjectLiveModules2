@@ -19,9 +19,9 @@ datatable_module_ui <- function(id){
 #' Data Table Module UI
 #'
 #' @param id A shiny id
-#' @param data A shiny::reactive that returns A data frame.
 #' @param config A shiny::reactive that returns a named list:
 #'  - "name": a title for the shinydashboard::box
+#' @param data A shiny::reactive that returns A data frame.
 #'
 #' @export
 datatable_module_server <- function(id, config, data){
@@ -31,7 +31,7 @@ datatable_module_server <- function(id, config, data){
       ns <- session$ns
 
       box_title <- shiny::reactive({
-        if(is.null(config()$name)) title <- "Barchart"
+        if(is.null(config()$name)) title <- "Datatable"
         else title <- config()$name
         return(title)
       })

@@ -13,21 +13,18 @@ admin_module_ui <- function(id){
         solidHeader = TRUE,
         status = "warning",
         title = "Controls",
+        shiny::uiOutput(ns("config_selection_ui")),
         shiny::uiOutput(ns("entity_selection_ui")),
-        shiny::selectInput(
-          ns("display_choice"),
-          label = "Select How to display items.",
-          choices = list("Barchart", "Data Table")
-        )
+        shiny::uiOutput(ns("display_selection_ui")),
       )
     ),
     shiny::conditionalPanel(
-      condition = "input.display_choice == 'Data Table'",
+      condition = "input.display_choice == 'datatable'",
       admin_datatable_module_ui(ns("datatable")),
       ns = ns
     ),
     shiny::conditionalPanel(
-      condition = "input.display_choice == 'Barchart'",
+      condition = "input.display_choice == 'barchart'",
       admin_barchart_module_ui(ns("barchart")),
       ns = ns
     ),
@@ -43,23 +40,85 @@ admin_module_ui <- function(id){
 #' @param data A named list of data frames
 #'
 #' @export
-admin_module_server <- function(id, data){
+admin_module_server <- function(id, config_list, data, synapse_token){
   shiny::moduleServer(
     id,
     function(input, output, session) {
       ns <- session$ns
 
-      output$entity_selection_ui <- shiny::renderUI({
+      # JSON input ----
+
+      input_config_names <- shiny::reactive({
+        shiny::req(config_list())
+        purrr::map_chr(config_list(), "name")
+      })
+
+      output$config_selection_ui <- shiny::renderUI({
+        shiny::req(input_config_names())
+
         shiny::selectInput(
-          ns("entity_choice"),
-          label = "Select Items to plot.",
-          choices = names(data)
+          ns("config_choice"),
+          label = "Select Config.",
+          choices = input_config_names()
         )
       })
 
+      selected_input_config <- shiny::reactive({
+        shiny::req(config_list(), input$config_choice)
+        lst <- purrr::keep(
+          config_list(),
+          function(x) x$name == input$config_choice
+        )
+        if(length(lst) == 0L) stop("No matching configs")
+        if(length(lst) > 1L) stop("Too many matching configs")
+        lst[[1]]
+
+      })
+
+      # other input ----
+
+      #TODO: change
+      display_selection_default <- shiny::reactive({
+        if(TRUE) default <- selected_input_config()$type
+        else default <- NA
+      })
+
+      output$display_selection_ui <- shiny::renderUI({
+        shiny::req(display_selection_default())
+
+        shiny::selectInput(
+          ns("display_choice"),
+          label = "Select How to display items.",
+          choices = list(
+            "Barchart" = "barchart",
+            "Data Table" = "datatable"
+          ),
+          selected = display_selection_default()
+        )
+      })
+
+      #TODO: change
+      entity_selection_default <- shiny::reactive({
+        if(TRUE) default <- selected_input_config()$entity
+        else default <- NA
+      })
+
+      output$entity_selection_ui <- shiny::renderUI({
+        shiny::req(entity_selection_default())
+
+        shiny::selectInput(
+          ns("entity_choice"),
+          label = "Select Items to plot.",
+          choices = names(data()),
+          selected = entity_selection_default()
+        )
+      })
+
+      # rest ----
+
       selected_data <- shiny::reactive({
         shiny::req(input$entity_choice)
-        purrr::pluck(data, input$entity_choice)
+        purrr::pluck(data(), input$entity_choice)
       })
 
       barchart_config <- admin_barchart_module_server(
@@ -76,8 +135,8 @@ admin_module_server <- function(id, data){
 
       config <- shiny::reactive({
         shiny::req(input$display_choice)
-        if(input$display_choice == "Barchart") return(barchart_config())
-        else if(input$display_choice == "Data Table") return(datatable_config())
+        if(input$display_choice == "barchart") return(barchart_config())
+        else if(input$display_choice == "datatable") return(datatable_config())
       })
 
       json_config <- shiny::reactive({
