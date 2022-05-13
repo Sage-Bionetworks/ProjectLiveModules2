@@ -37,13 +37,8 @@ attribute_selection_module_server <- function(
       validated_config <- shiny::reactive({
         if(!shiny::is.reactive(config)) stop("config is not reactive")
         if(is.null(config())) return(config())
-        malformed_config <- any(
-          !is.list(config()),
-          is.null(names(config())),
-          length(config()) == 0
-        )
-        if(malformed_config) stop("malformed config")
-        config()
+        validate_attribute_config(config())
+        return(config())
       })
 
       validated_name <- shiny::reactive({
@@ -51,18 +46,8 @@ attribute_selection_module_server <- function(
           stop("attribute_name is not reactive")
         }
         shiny::req(attribute_name())
-        name <- attribute_name()
-        malformed_name <- any(
-          length(name) != 1,
-          !is.character(name)
-        )
-        if(malformed_name) stop("malformed attribute name: ", name)
-        if(!is.null(validated_config())){
-          if(!name %in% names(validated_config())){
-            stop("attribute name: ", name, " not in config names")
-          }
-        }
-        return(name)
+        validate_attribute_name(attribute_name(), validated_config())
+        return(attribute_name())
       })
 
       validated_choices <- shiny::reactive({
@@ -71,11 +56,7 @@ attribute_selection_module_server <- function(
         }
         shiny::req(attribute_choices())
         choices <- attribute_choices()
-        malformed_choices <- any(
-          is.null(names(choices)),
-          length(choices) == 0
-        )
-        if(malformed_choices) stop("malformed attribute choices")
+        validate_attribute_choices(choices)
         return(choices)
       })
 
