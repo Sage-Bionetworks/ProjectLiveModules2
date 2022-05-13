@@ -16,9 +16,6 @@ admin_barchart_module_ui <- function(id){
         attribute_selection_module_ui(ns("x_attribute")),
         attribute_selection_module_ui(ns("color_attribute")),
         attribute_selection_module_ui(ns("group_attribute"))
-        # shiny::uiOutput(ns("x_attribute_ui")),
-        # shiny::uiOutput(ns("color_attribute_ui")),
-        # shiny::uiOutput(ns("group_attribute_ui"))
       )
     ),
     shiny::fluidRow(barchart_module_ui(ns("barchart")))

@@ -63,22 +63,22 @@ json_module_server <- function(id){
           purrr::pluck("plots")
       })
 
-      input_config_names <- shiny::reactive({
+      config_names <- shiny::reactive({
         shiny::req(config_list())
         purrr::map_chr(config_list(), "name")
       })
 
       output$config_selection_ui <- shiny::renderUI({
-        shiny::req(input_config_names())
+        shiny::req(config_names())
 
         shiny::selectInput(
           ns("config_choice"),
           label = "Select Config",
-          choices = input_config_names()
+          choices = config_names()
         )
       })
 
-      selected_input_config <- shiny::reactive({
+      selected_config <- shiny::reactive({
         if(input$config_method_choice == "none") return(NULL)
         shiny::req(config_list(), input$config_choice)
         lst <- purrr::keep(
@@ -88,10 +88,15 @@ json_module_server <- function(id){
         if(length(lst) == 0L) stop("No matching configs")
         if(length(lst) > 1L) stop("Too many matching configs")
         config <- lst[[1]]
+        malformed_config <- any(
+          is.null(names(config)),
+          length(config) == 0
+        )
+        if(malformed_config) stop("Selected config is malformed.")
         return(config)
       })
 
-      return(selected_input_config)
+      return(selected_config)
     }
   )
 }

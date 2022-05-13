@@ -15,8 +15,9 @@ admin_module_ui <- function(id){
         title = "Controls",
         json_module_ui(ns("json")),
         shiny::uiOutput(ns("name_selection_ui")),
-        shiny::uiOutput(ns("entity_selection_ui")),
-        shiny::uiOutput(ns("display_selection_ui")),
+        # shiny::uiOutput(ns("entity_selection_ui")),
+        attribute_selection_module_ui(ns("entity_choice")),
+        attribute_selection_module_ui(ns("display_choice"))
       )
     ),
     shiny::conditionalPanel(
@@ -64,8 +65,6 @@ admin_module_server <- function(id, data){
       output$name_selection_ui <- shiny::renderUI({
 
         shiny::req(!is.null(name_selection_default()))
-
-
         shiny::textInput(
           ns("name_choice"),
           label = "Pick a unique name for your plot.",
@@ -73,62 +72,39 @@ admin_module_server <- function(id, data){
         )
       })
 
-      display_selection_default <- shiny::reactive({
-        if(is.null(selected_input_config())){
-          default <- NA
-        } else {
-          default <- selected_input_config()$type
-        }
-        return(default)
-      })
-
-      output$display_selection_ui <- shiny::renderUI({
-        shiny::req(!is.null(display_selection_default()))
-
-        shiny::selectInput(
-          ns("display_choice"),
-          label = "Select How to display items.",
-          choices = list(
+      display_choice <- attribute_selection_module_server(
+        "display_choice",
+        selected_input_config,
+        shiny::reactive("type"),
+        shiny::reactive(
+          list(
             "Barchart" = "barchart",
             "Data Table" = "datatable"
-          ),
-          selected = display_selection_default()
-        )
-      })
+          )
+        ),
+        ui_label = shiny::reactive("Select How to display items.")
+      )
 
-      entity_selection_default <- shiny::reactive({
-        if(is.null(selected_input_config())){
-          default <- NA
-        }
-        else {
-          default <- selected_input_config()$entity
-        }
-        return(default)
-      })
-
-      output$entity_selection_ui <- shiny::renderUI({
-        shiny::req(!is.null(entity_selection_default()))
-
-        shiny::selectInput(
-          ns("entity_choice"),
-          label = "Select Items to plot.",
-          choices = names(data()),
-          selected = entity_selection_default()
-        )
-      })
+      entity_choice <- attribute_selection_module_server(
+        "entity_choice",
+        selected_input_config,
+        shiny::reactive("entity"),
+        shiny::reactive(names(data())),
+        ui_label = shiny::reactive("Select Items to plot.")
+      )
 
       # rest ----
 
       selected_data <- shiny::reactive({
-        shiny::req(input$entity_choice)
-        purrr::pluck(data(), input$entity_choice)
+        shiny::req(entity_choice())
+        purrr::pluck(data(), entity_choice())
       })
 
       barchart_config <- admin_barchart_module_server(
         "barchart",
         selected_data,
         selected_input_config,
-        shiny::reactive(input$entity_choice),
+        entity_choice,
         shiny::reactive(input$name_choice)
       )
 
@@ -136,14 +112,14 @@ admin_module_server <- function(id, data){
         "datatable",
         selected_data,
         selected_input_config,
-        shiny::reactive(input$entity_choice),
+        entity_choice,
         shiny::reactive(input$name_choice)
       )
 
       config <- shiny::reactive({
-        shiny::req(input$display_choice)
-        if(input$display_choice == "barchart") return(barchart_config())
-        else if(input$display_choice == "datatable") return(datatable_config())
+        shiny::req(display_choice())
+        if(display_choice() == "barchart") return(barchart_config())
+        else if(display_choice() == "datatable") return(datatable_config())
       })
 
       json_config <- shiny::reactive({
