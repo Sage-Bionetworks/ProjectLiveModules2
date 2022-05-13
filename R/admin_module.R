@@ -15,7 +15,7 @@ admin_module_ui <- function(id){
         title = "Controls",
         shiny::selectInput(
           ns("config_method_choice"),
-          label = "Select Config Method",
+          label = "Select Config Method.",
           choices = c(
             "Start From Scratch" = "none",
             # TODO: implement synapse API
@@ -42,6 +42,7 @@ admin_module_ui <- function(id){
           ),
           ns = ns
         ),
+        shiny::uiOutput(ns("name_selection_ui")),
         shiny::uiOutput(ns("config_selection_ui")),
         shiny::uiOutput(ns("entity_selection_ui")),
         shiny::uiOutput(ns("display_selection_ui")),
@@ -118,6 +119,25 @@ admin_module_server <- function(id, data){
 
       # other input ----
 
+      name_selection_default <- shiny::reactive({
+        if(input$config_method_choice == "none"){
+          default <- ""
+        } else {
+          default <- selected_input_config()$name
+        }
+        return(default)
+      })
+
+      output$name_selection_ui <- shiny::renderUI({
+        shiny::req(!is.null(name_selection_default()))
+
+        shiny::textInput(
+          ns("name_choice"),
+          label = "Pick a unique name for your plot.",
+          value = name_selection_default()
+        )
+      })
+
       display_selection_default <- shiny::reactive({
         if(input$config_method_choice == "none"){
           default <- NA
@@ -173,14 +193,16 @@ admin_module_server <- function(id, data){
         "barchart",
         selected_data,
         selected_input_config,
-        shiny::reactive(input$entity_choice)
+        shiny::reactive(input$entity_choice),
+        shiny::reactive(input$name_choice)
       )
 
       datatable_config <- admin_datatable_module_server(
         "datatable",
         selected_data,
         selected_input_config,
-        shiny::reactive(input$entity_choice)
+        shiny::reactive(input$entity_choice),
+        shiny::reactive(input$name_choice)
       )
 
       config <- shiny::reactive({

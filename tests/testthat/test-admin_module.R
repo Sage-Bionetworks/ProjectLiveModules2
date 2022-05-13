@@ -6,14 +6,10 @@ data <-
   testthat::test_path("RDS", "data.rds") %>%
   readRDS()
 
-mock_config_list <-
-  testthat::test_path("JSON", "test.json") %>%
-  jsonlite::read_json() %>%
-  purrr::pluck("plots")
-
 expected_barchart_config <-  list(
   "type" = "barchart",
   "entity" = "Files",
+  "name" = "Plot 1",
   "x_attribute" = "assay",
   "group_attribute" = "year",
   "color_attribute" = "file_format"
@@ -21,7 +17,8 @@ expected_barchart_config <-  list(
 
 expected_datatable_config <- list(
   "type" = "datatable",
-  "entity" = "Files"
+  "entity" = "Files",
+  "name" = "Data Table 1"
 )
 
 test_that("admin_module_server_barchart_no_json_input", {
@@ -35,11 +32,14 @@ test_that("admin_module_server_barchart_no_json_input", {
       session$setInputs("config_choice" = "Plot 1")
       session$setInputs("display_choice" = "barchart")
       session$setInputs("entity_choice" = "Files")
+      session$setInputs("name_choice" = "Plot 1")
       session$setInputs("barchart-x_attribute" = "assay")
       session$setInputs("barchart-color_attribute" = "file_format")
       session$setInputs("barchart-group_attribute" = "year")
 
       # other input
+      expect_equal(name_selection_default(), "")
+      expect_type(output$name_selection_ui, "list")
       expect_true(is.na(display_selection_default()))
       expect_type(output$display_selection_ui, "list")
       expect_true(is.na(entity_selection_default()))
@@ -67,6 +67,7 @@ test_that("admin_module_server_barchart_with_json_input", {
       session$setInputs("config_choice" = "Plot 1")
       session$setInputs("display_choice" = "barchart")
       session$setInputs("entity_choice" = "Files")
+      session$setInputs("name_choice" = "Plot 1")
       session$setInputs("barchart-x_attribute" = "assay")
       session$setInputs("barchart-color_attribute" = "file_format")
       session$setInputs("barchart-group_attribute" = "year")
@@ -106,6 +107,7 @@ test_that("admin_module_server_datatable_with_json_input", {
       session$setInputs("config_choice" = "Data Table 1")
       session$setInputs("display_choice" = "datatable")
       session$setInputs("entity_choice" = "Files")
+      session$setInputs("name_choice" = "Data Table 1")
 
       # JSON input
       expect_equal(input_config_names(), c("Plot 1", "Plot 2", "Data Table 1"))
@@ -129,7 +131,4 @@ test_that("admin_module_server_datatable_with_json_input", {
     }
   )
 })
-
-
-
 

@@ -4,7 +4,7 @@
 \alias{admin_datatable_module_server}
 \title{Admin Data Table Module Server}
 \usage{
-admin_datatable_module_server(id, data, config, entity)
+admin_datatable_module_server(id, data, config, entity, name)
 }
 \arguments{
 \item{id}{A shiny id}
@@ -14,6 +14,8 @@ admin_datatable_module_server(id, data, config, entity)
 \item{config}{A shiny::reactive that returns a named list or Null.}
 
 \item{entity}{A shiny::reactive that returns a string}
+
+\item{name}{A shiny::reactive that returns a string}
 }
 \description{
 Admin Data Table Module Server

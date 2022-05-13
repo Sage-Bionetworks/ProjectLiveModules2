@@ -14,7 +14,8 @@ test_that("admin_barchart_module_server_no_group_or_color", {
     args = list(
       "data" = shiny::reactive(data),
       "input_config" = shiny::reactive(NULL),
-      "entity" = shiny::reactive("Files")
+      "entity" = shiny::reactive("Files"),
+      "name" = shiny::reactive("Plot 1")
     ),
     {
 
@@ -41,6 +42,7 @@ test_that("admin_barchart_module_server_no_group_or_color", {
         list(
           "type" = "barchart",
           "entity" = "Files",
+          "name" = "Plot 1",
           "x_attribute" = "assay"
         )
       )
@@ -61,7 +63,8 @@ test_that("admin_barchart_module_server_no_group_or_color_with_config", {
     args = list(
       "data" = shiny::reactive(data),
       "input_config" = shiny::reactive(barchart_config1),
-      "entity" = shiny::reactive("Files")
+      "entity" = shiny::reactive("Files"),
+      "name" = shiny::reactive("Plot 1")
     ),
     {
 
@@ -88,6 +91,7 @@ test_that("admin_barchart_module_server_no_group_or_color_with_config", {
         list(
           "type" = "barchart",
           "entity" = "Files",
+          "name" = "Plot 1",
           "x_attribute" = "assay"
         )
       )
@@ -101,7 +105,8 @@ test_that("admin_barchart_module_server_with_group", {
     args = list(
       "data" = shiny::reactive(data),
       "input_config" = shiny::reactive(NULL),
-      "entity" = shiny::reactive("Files")
+      "entity" = shiny::reactive("Files"),
+      "name" = shiny::reactive("Plot 1")
     ),
     {
 
@@ -124,6 +129,7 @@ test_that("admin_barchart_module_server_with_group", {
         list(
           "type" = "barchart",
           "entity" = "Files",
+          "name" = "Plot 1",
           "x_attribute" = "assay",
           "group_attribute" = "file_format"
         )
@@ -138,7 +144,8 @@ test_that("admin_barchart_module_server_with_group_and_color", {
     args = list(
       "data" = shiny::reactive(data),
       "input_config" = shiny::reactive(NULL),
-      "entity" = shiny::reactive("Files")
+      "entity" = shiny::reactive("Files"),
+      "name" = shiny::reactive("Plot 1")
     ),
     {
 
@@ -160,6 +167,7 @@ test_that("admin_barchart_module_server_with_group_and_color", {
         list(
           "type" = "barchart",
           "entity" = "Files",
+          "name" = "Plot 1",
           "x_attribute" = "assay",
           "group_attribute" = "file_format",
           "color_attribute" = "year"

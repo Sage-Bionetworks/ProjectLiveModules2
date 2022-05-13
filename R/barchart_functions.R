@@ -1,15 +1,17 @@
 #' Create Barchart Config
 #'
 #' @param entity A string
+#' @param name A string
 #' @param x_attribute A stirng
 #' @param group_attribute A string
 #' @param color_attribute A string
 create_barchart_config <- function(
-    entity, x_attribute, group_attribute, color_attribute
+    entity, name, x_attribute, group_attribute, color_attribute
 ){
   config <- list(
     "type" = "barchart",
     "entity" = entity,
+    "name" = name,
     "x_attribute" = x_attribute
   )
 

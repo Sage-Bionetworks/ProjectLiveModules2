@@ -30,9 +30,10 @@ admin_barchart_module_ui <- function(id){
 #' @param data A shiny::reactive that returns a data frame
 #' @param input_config A shiny::reactive that returns a named list or Null.
 #' @param entity A shiny::reactive that returns a string
+#' @param name A shiny::reactive that returns a string
 #'
 #' @export
-admin_barchart_module_server <- function(id, data, input_config, entity){
+admin_barchart_module_server <- function(id, data, input_config, entity, name){
   shiny::moduleServer(
     id,
     function(input, output, session) {
@@ -109,6 +110,7 @@ admin_barchart_module_server <- function(id, data, input_config, entity){
       output_config <- shiny::reactive({
         shiny::req(
           entity(),
+          name(),
           input$x_attribute,
           input$group_attribute,
           input$color_attribute
@@ -116,6 +118,7 @@ admin_barchart_module_server <- function(id, data, input_config, entity){
 
         create_barchart_config(
           entity(),
+          name(),
           input$x_attribute,
           input$group_attribute,
           input$color_attribute

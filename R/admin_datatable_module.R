@@ -19,9 +19,10 @@ admin_datatable_module_ui <- function(id){
 #' @param data A shiny::reactive that returns a data frame
 #' @param config A shiny::reactive that returns a named list or Null.
 #' @param entity A shiny::reactive that returns a string
+#' @param name A shiny::reactive that returns a string
 #'
 #' @export
-admin_datatable_module_server <- function(id, data, config, entity){
+admin_datatable_module_server <- function(id, data, config, entity, name){
   shiny::moduleServer(
     id,
     function(input, output, session) {
@@ -31,7 +32,8 @@ admin_datatable_module_server <- function(id, data, config, entity){
         shiny::req(entity())
         list(
           "type" = "datatable",
-          "entity" = entity()
+          "entity" = entity(),
+          "name" = name()
         )
       })
 

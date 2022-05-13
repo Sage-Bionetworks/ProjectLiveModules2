@@ -4,7 +4,7 @@
 \alias{admin_barchart_module_server}
 \title{Admin Barchart Module Server}
 \usage{
-admin_barchart_module_server(id, data, input_config, entity)
+admin_barchart_module_server(id, data, input_config, entity, name)
 }
 \arguments{
 \item{id}{A shiny id}
@@ -14,6 +14,8 @@ admin_barchart_module_server(id, data, input_config, entity)
 \item{input_config}{A shiny::reactive that returns a named list or Null.}
 
 \item{entity}{A shiny::reactive that returns a string}
+
+\item{name}{A shiny::reactive that returns a string}
 }
 \description{
 Admin Barchart Module Server

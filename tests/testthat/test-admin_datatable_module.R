@@ -9,7 +9,8 @@ data <-
 
 expected_config <- list(
   "type" = "datatable",
-  "entity" = "Files"
+  "entity" = "Files",
+  "name" = "Data Table 1"
 )
 
 test_that("admin_datatable_module_server", {
@@ -18,6 +19,7 @@ test_that("admin_datatable_module_server", {
     args = list(
       "data" = shiny::reactive(data),
       "entity" = shiny::reactive("Files"),
+      "name" = shiny::reactive("Data Table 1"),
       "config" = shiny::reactive(NULL)
     ),
     {
