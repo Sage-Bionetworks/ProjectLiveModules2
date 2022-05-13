@@ -33,9 +33,9 @@ test_that("admin_module_server_barchart_no_json_input", {
       session$setInputs("display_choice" = "barchart")
       session$setInputs("entity_choice" = "Files")
       session$setInputs("name_choice" = "Plot 1")
-      session$setInputs("barchart-x_attribute" = "assay")
-      session$setInputs("barchart-color_attribute" = "file_format")
-      session$setInputs("barchart-group_attribute" = "year")
+      session$setInputs("barchart-x_attribute-attribute_choice" = "assay")
+      session$setInputs("barchart-color_attribute-attribute_choice" = "file_format")
+      session$setInputs("barchart-group_attribute-attribute_choice" = "year")
 
       # other input
       expect_equal(name_selection_default(), "")
@@ -68,9 +68,9 @@ test_that("admin_module_server_barchart_with_json_input", {
       session$setInputs("display_choice" = "barchart")
       session$setInputs("entity_choice" = "Files")
       session$setInputs("name_choice" = "Plot 1")
-      session$setInputs("barchart-x_attribute" = "assay")
-      session$setInputs("barchart-color_attribute" = "file_format")
-      session$setInputs("barchart-group_attribute" = "year")
+      session$setInputs("barchart-x_attribute-attribute_choice" = "assay")
+      session$setInputs("barchart-color_attribute-attribute_choice" = "file_format")
+      session$setInputs("barchart-group_attribute-attribute_choice" = "year")
 
       # other input
       expect_equal(display_selection_default(), "barchart")
