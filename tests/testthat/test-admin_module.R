@@ -28,8 +28,8 @@ test_that("admin_module_server_barchart_no_json_input", {
       "data" = shiny::reactive(data)
     ),
     {
-      session$setInputs("config_method_choice" = "none")
-      session$setInputs("config_choice" = "Plot 1")
+      session$setInputs("json-config_method_choice" = "none")
+      session$setInputs("json-config_choice" = "Plot 1")
       session$setInputs("display_choice" = "barchart")
       session$setInputs("entity_choice" = "Files")
       session$setInputs("name_choice" = "Plot 1")
@@ -62,22 +62,15 @@ test_that("admin_module_server_barchart_with_json_input", {
       "data" = shiny::reactive(data)
     ),
     {
-      session$setInputs("config_method_choice" = "upload")
-      session$setInputs("json_upload"= list(datapath = "JSON/test.json"))
-      session$setInputs("config_choice" = "Plot 1")
+      session$setInputs("json-config_method_choice" = "upload")
+      session$setInputs("json-json_upload"= list(datapath = "JSON/test.json"))
+      session$setInputs("json-config_choice" = "Plot 1")
       session$setInputs("display_choice" = "barchart")
       session$setInputs("entity_choice" = "Files")
       session$setInputs("name_choice" = "Plot 1")
       session$setInputs("barchart-x_attribute" = "assay")
       session$setInputs("barchart-color_attribute" = "file_format")
       session$setInputs("barchart-group_attribute" = "year")
-
-      # JSON input
-      expect_equal(input_config_names(), c("Plot 1", "Plot 2", "Data Table 1"))
-      expect_type(output$config_selection_ui, "list")
-      expect_equal(selected_input_config()$name, "Plot 1")
-      expect_equal(selected_input_config()$type, "barchart")
-      expect_equal(selected_input_config()$entity, "Files")
 
       # other input
       expect_equal(display_selection_default(), "barchart")
@@ -102,19 +95,12 @@ test_that("admin_module_server_datatable_with_json_input", {
       "data" = shiny::reactive(data)
     ),
     {
-      session$setInputs("config_method_choice" = "upload")
-      session$setInputs("json_upload"= list(datapath = "JSON/test.json"))
-      session$setInputs("config_choice" = "Data Table 1")
+      session$setInputs("json-config_method_choice" = "upload")
+      session$setInputs("json-json_upload"= list(datapath = "JSON/test.json"))
+      session$setInputs("json-config_choice" = "Data Table 1")
       session$setInputs("display_choice" = "datatable")
       session$setInputs("entity_choice" = "Files")
       session$setInputs("name_choice" = "Data Table 1")
-
-      # JSON input
-      expect_equal(input_config_names(), c("Plot 1", "Plot 2", "Data Table 1"))
-      expect_type(output$config_selection_ui, "list")
-      expect_equal(selected_input_config()$name, "Data Table 1")
-      expect_equal(selected_input_config()$type, "datatable")
-      expect_equal(selected_input_config()$entity, "Files")
 
       # other input
       expect_equal(display_selection_default(), "datatable")

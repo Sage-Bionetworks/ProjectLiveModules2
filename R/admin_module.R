@@ -13,37 +13,8 @@ admin_module_ui <- function(id){
         solidHeader = TRUE,
         status = "warning",
         title = "Controls",
-        shiny::selectInput(
-          ns("config_method_choice"),
-          label = "Select Config Method.",
-          choices = c(
-            "Start From Scratch" = "none",
-            # TODO: implement synapse API
-            # "Download JSON from synapse" = "synapse",
-            "Upload JSON from workstation" = "upload"
-          )
-        ),
-        shiny::conditionalPanel(
-          condition = "input.config_method_choice == 'synapse'",
-          shiny::textInput(
-            ns("file"),
-            label = "Enter synapse id for JSON file",
-            placeholder = "syn"
-          ),
-          ns = ns
-        ),
-        shiny::conditionalPanel(
-          condition = "input.config_method_choice == 'upload'",
-          shiny::fileInput(
-            ns("json_upload"),
-            "Choose CSV File",
-            multiple = FALSE,
-            accept = c(".json")
-          ),
-          ns = ns
-        ),
+        json_module_ui(ns("json")),
         shiny::uiOutput(ns("name_selection_ui")),
-        shiny::uiOutput(ns("config_selection_ui")),
         shiny::uiOutput(ns("entity_selection_ui")),
         shiny::uiOutput(ns("display_selection_ui")),
       )
@@ -76,51 +47,13 @@ admin_module_server <- function(id, data){
     function(input, output, session) {
       ns <- session$ns
 
-      # JSON input ----
 
-      config_list <- shiny::reactive({
-        shiny::req(
-          input$config_method_choice == "upload",
-          input$json_upload$datapath
-        )
-        lst <-
-          input$json_upload$datapath %>%
-          jsonlite::read_json() %>%
-          purrr::pluck("plots")
-      })
-
-      input_config_names <- shiny::reactive({
-        shiny::req(config_list())
-        purrr::map_chr(config_list(), "name")
-      })
-
-      output$config_selection_ui <- shiny::renderUI({
-        shiny::req(input_config_names())
-
-        shiny::selectInput(
-          ns("config_choice"),
-          label = "Select Config",
-          choices = input_config_names()
-        )
-      })
-
-      selected_input_config <- shiny::reactive({
-        if(input$config_method_choice == "none") return(NULL)
-        shiny::req(config_list(), input$config_choice)
-        lst <- purrr::keep(
-          config_list(),
-          function(x) x$name == input$config_choice
-        )
-        if(length(lst) == 0L) stop("No matching configs")
-        if(length(lst) > 1L) stop("Too many matching configs")
-        config <- lst[[1]]
-        return(config)
-      })
+      selected_input_config <- json_module_server("json")
 
       # other input ----
 
       name_selection_default <- shiny::reactive({
-        if(input$config_method_choice == "none"){
+        if(is.null(selected_input_config())){
           default <- ""
         } else {
           default <- selected_input_config()$name
@@ -129,7 +62,9 @@ admin_module_server <- function(id, data){
       })
 
       output$name_selection_ui <- shiny::renderUI({
+
         shiny::req(!is.null(name_selection_default()))
+
 
         shiny::textInput(
           ns("name_choice"),
@@ -139,7 +74,7 @@ admin_module_server <- function(id, data){
       })
 
       display_selection_default <- shiny::reactive({
-        if(input$config_method_choice == "none"){
+        if(is.null(selected_input_config())){
           default <- NA
         } else {
           default <- selected_input_config()$type
@@ -162,7 +97,7 @@ admin_module_server <- function(id, data){
       })
 
       entity_selection_default <- shiny::reactive({
-        if(input$config_method_choice == "none"){
+        if(is.null(selected_input_config())){
           default <- NA
         }
         else {

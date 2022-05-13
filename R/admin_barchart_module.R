@@ -110,7 +110,7 @@ admin_barchart_module_server <- function(id, data, input_config, entity, name){
       output_config <- shiny::reactive({
         shiny::req(
           entity(),
-          name(),
+          !is.null(name()),
           input$x_attribute,
           input$group_attribute,
           input$color_attribute
