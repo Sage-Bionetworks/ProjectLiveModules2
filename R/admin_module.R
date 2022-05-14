@@ -15,21 +15,21 @@ admin_module_ui <- function(id){
         title = "Controls",
         json_module_ui(ns("json")),
         shiny::uiOutput(ns("name_selection_ui")),
-        # shiny::uiOutput(ns("entity_selection_ui")),
         attribute_selection_module_ui(ns("entity_choice")),
         attribute_selection_module_ui(ns("display_choice"))
       )
     ),
     shiny::conditionalPanel(
-      condition = "input.display_choice == 'datatable'",
-      admin_datatable_module_ui(ns("datatable")),
-      ns = ns
-    ),
-    shiny::conditionalPanel(
-      condition = "input.display_choice == 'barchart'",
+      condition = "output.display_choice == 'barchart'",
       admin_barchart_module_ui(ns("barchart")),
       ns = ns
     ),
+    shiny::conditionalPanel(
+      condition = "output.display_choice == 'datatable'",
+      admin_datatable_module_ui(ns("datatable")),
+      ns = ns
+    ),
+    display_module_ui(ns("display")),
     shiny::downloadButton(ns("download_json"), "Download JSON"),
   )
 
@@ -63,7 +63,6 @@ admin_module_server <- function(id, data){
       })
 
       output$name_selection_ui <- shiny::renderUI({
-
         shiny::req(!is.null(name_selection_default()))
         shiny::textInput(
           ns("name_choice"),
@@ -85,11 +84,19 @@ admin_module_server <- function(id, data){
         ui_label = shiny::reactive("Select How to display items.")
       )
 
+      output$display_choice <- shiny::reactive(display_choice())
+
+      shiny::outputOptions(
+        output,
+        "display_choice",
+        suspendWhenHidden = FALSE
+      )
+
       entity_choice <- attribute_selection_module_server(
         "entity_choice",
         selected_input_config,
         shiny::reactive("entity"),
-        shiny::reactive(names(data())),
+        shiny::reactive(purrr::set_names(names(data()), names(data()))),
         ui_label = shiny::reactive("Select Items to plot.")
       )
 
@@ -103,38 +110,59 @@ admin_module_server <- function(id, data){
       barchart_config <- admin_barchart_module_server(
         "barchart",
         selected_data,
-        selected_input_config,
-        entity_choice,
-        shiny::reactive(input$name_choice)
+        selected_input_config
       )
 
       datatable_config <- admin_datatable_module_server(
         "datatable",
-        selected_data,
-        selected_input_config,
-        entity_choice,
-        shiny::reactive(input$name_choice)
+        selected_input_config
       )
 
-      config <- shiny::reactive({
+      plot_config <- shiny::reactive({
         shiny::req(display_choice())
         if(display_choice() == "barchart") return(barchart_config())
         else if(display_choice() == "datatable") return(datatable_config())
       })
 
-      json_config <- shiny::reactive({
-        jsonlite::toJSON(config())
+      output_config <- shiny::reactive({
+        shiny::req(
+          !is.null(entity_choice()),
+          !is.null(input$name_choice),
+          !is.null(plot_config())
+        )
+
+        config <- list(
+          "entity" = entity_choice(),
+          "name" = input$name_choice
+        )
+        if(display_choice() == "barchart") {
+          config <- c(
+            config,
+            list("barchart" = plot_config())
+          )
+        } else if(display_choice() == "datatable") {
+          config <- c(
+            config,
+            list("datatable" = plot_config())
+          )
+        }
+        return(config)
       })
+
+      display_module_server(
+        id = "display",
+        config = output_config,
+        data = data
+      )
 
       output$download_json <- shiny::downloadHandler(
         filename = function() "test.json",
         content = function(con) writeLines(
-          jsonlite::toJSON(config()),
+          jsonlite::toJSON(output_config()),
           con
         )
       )
 
-      return(config)
 
     }
   )

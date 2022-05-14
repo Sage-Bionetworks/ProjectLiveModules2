@@ -7,18 +7,23 @@ data <-
   readRDS()
 
 expected_barchart_config <-  list(
-  "type" = "barchart",
-  "entity" = "Files",
-  "name" = "Plot 1",
   "x_attribute" = "assay",
   "group_attribute" = "year",
   "color_attribute" = "file_format"
 )
 
-expected_datatable_config <- list(
-  "type" = "datatable",
+expected_output_config1 <-  list(
   "entity" = "Files",
-  "name" = "Data Table 1"
+  "name" = "Plot 1",
+  "barchart" = expected_barchart_config
+)
+
+expected_datatable_config <- list()
+
+expected_output_config2 <- list(
+  "entity" = "Files",
+  "name" = "Data Table 1",
+  "datatable" = expected_datatable_config
 )
 
 test_that("admin_module_server_barchart_no_json_input", {
@@ -47,9 +52,8 @@ test_that("admin_module_server_barchart_no_json_input", {
       # rest
       expect_true(tibble::is_tibble(selected_data()))
       expect_equal(barchart_config(), expected_barchart_config)
-      expect_equal(config(), expected_barchart_config)
-      expect_type(json_config(), "character")
-      expect_equal(session$getReturned()(), expected_barchart_config)
+      expect_equal(plot_config(), expected_barchart_config)
+      expect_equal(output_config(), expected_output_config1)
     }
   )
 })
@@ -72,15 +76,17 @@ test_that("admin_module_server_barchart_with_json_input", {
       session$setInputs("barchart-group_attribute-attribute_choice" = "year")
 
       # other input
+      expect_equal(name_selection_default(), "Plot 1")
+      expect_type(output$name_selection_ui, "list")
+
       expect_equal(display_choice(), "barchart")
       expect_equal(entity_choice(), "Files")
-      #
-      # # rest
+
+      # rest
       expect_true(tibble::is_tibble(selected_data()))
       expect_equal(barchart_config(), expected_barchart_config)
-      expect_equal(config(), expected_barchart_config)
-      expect_type(json_config(), "character")
-      expect_equal(session$getReturned()(), expected_barchart_config)
+      expect_equal(plot_config(), expected_barchart_config)
+      expect_equal(output_config(), expected_output_config1)
     }
   )
 })
@@ -106,9 +112,8 @@ test_that("admin_module_server_datatable_with_json_input", {
       # rest
       expect_true(tibble::is_tibble(selected_data()))
       expect_equal(datatable_config(), expected_datatable_config)
-      expect_equal(config(), expected_datatable_config)
-      expect_type(json_config(), "character")
-      expect_equal(session$getReturned()(), expected_datatable_config)
+      expect_equal(plot_config(), expected_datatable_config)
+      expect_equal(output_config(), expected_output_config2)
     }
   )
 })

@@ -12,7 +12,7 @@ display_module_server(id, config, data)
 \item{config}{A shiny::reactive that returns a named list:
 - "type": one of c("datatable", "barchart")
 - "entity": a name in data
--  other attributes: see barchart_module_server() and
+-  One of ("barchart", "datatable"). See barchart_module_server() and
 datatable_module_server()}
 
 \item{data}{A shiny::reactive that returns a named list of data frames.}

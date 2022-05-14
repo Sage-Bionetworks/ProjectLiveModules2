@@ -6,19 +6,16 @@
 admin_barchart_module_ui <- function(id){
   ns <- shiny::NS(id)
 
-  shiny::tagList(
-    shiny::fluidRow(
-      shinydashboard::box(
-        width = 12,
-        solidHeader = TRUE,
-        status = "warning",
-        title = "Barchart Controls",
-        attribute_selection_module_ui(ns("x_attribute")),
-        attribute_selection_module_ui(ns("color_attribute")),
-        attribute_selection_module_ui(ns("group_attribute"))
-      )
-    ),
-    shiny::fluidRow(barchart_module_ui(ns("barchart")))
+  shiny::fluidRow(
+    shinydashboard::box(
+      width = 12,
+      solidHeader = TRUE,
+      status = "warning",
+      title = "Barchart Controls",
+      attribute_selection_module_ui(ns("x_attribute")),
+      attribute_selection_module_ui(ns("color_attribute")),
+      attribute_selection_module_ui(ns("group_attribute"))
+    )
   )
 
 }
@@ -29,11 +26,9 @@ admin_barchart_module_ui <- function(id){
 #' @param id A shiny id
 #' @param data A shiny::reactive that returns a data frame
 #' @param input_config A shiny::reactive that returns a named list or Null.
-#' @param entity A shiny::reactive that returns a string
-#' @param name A shiny::reactive that returns a string
 #'
 #' @export
-admin_barchart_module_server <- function(id, data, input_config, entity, name){
+admin_barchart_module_server <- function(id, data, input_config){
   shiny::moduleServer(
     id,
     function(input, output, session) {
@@ -91,27 +86,17 @@ admin_barchart_module_server <- function(id, data, input_config, entity, name){
 
       output_config <- shiny::reactive({
         shiny::req(
-          entity(),
-          !is.null(name()),
           x_attribute(),
           group_attribute(),
           color_attribute()
         )
 
         create_barchart_config(
-          entity(),
-          name(),
           x_attribute(),
           group_attribute(),
           color_attribute()
         )
       })
-
-      barchart_module_server(
-        "barchart",
-        data,
-        output_config
-      )
 
       return(output_config)
 

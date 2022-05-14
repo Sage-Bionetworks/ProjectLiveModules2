@@ -4,18 +4,19 @@
 \alias{barchart_module_server}
 \title{Barchart Module Server}
 \usage{
-barchart_module_server(id, data, config)
+barchart_module_server(id, config, data, do_plot = shiny::reactive(T))
 }
 \arguments{
 \item{id}{A shiny id}
 
-\item{data}{A shiny::reactive that returns A data frame.}
-
 \item{config}{A shiny::reactive that returns a named list:
-- "name": a title for the shinydashboard::box
 - "x_attribute": Column in data param (required)
 - "color_attribute": Column in data param
 - "group_attribute": Column in data param}
+
+\item{data}{A shiny::reactive that returns A data frame.}
+
+\item{do_plot}{A shiny::reactive that returns a logical.}
 }
 \description{
 Barchart Module Server

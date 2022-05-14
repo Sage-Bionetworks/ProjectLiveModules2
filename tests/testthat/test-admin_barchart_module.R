@@ -13,9 +13,7 @@ test_that("admin_barchart_module_server_no_group_or_color", {
     admin_barchart_module_server,
     args = list(
       "data" = shiny::reactive(data),
-      "input_config" = shiny::reactive(NULL),
-      "entity" = shiny::reactive("Files"),
-      "name" = shiny::reactive("Plot 1")
+      "input_config" = shiny::reactive(NULL)
     ),
     {
 
@@ -32,35 +30,20 @@ test_that("admin_barchart_module_server_no_group_or_color", {
 
       expect_equal(
         session$getReturned()(),
-        list(
-          "type" = "barchart",
-          "entity" = "Files",
-          "name" = "Plot 1",
-          "x_attribute" = "assay"
-        )
+        list("x_attribute" = "assay")
       )
     }
   )
 })
-
-barchart_config1 <-  list(
-  "name" = "Plot 1",
-  "type" = "barchart",
-  "entity" = "Files",
-  "x_attribute" = "assay"
-)
 
 test_that("admin_barchart_module_server_no_group_or_color_with_config", {
   shiny::testServer(
     admin_barchart_module_server,
     args = list(
       "data" = shiny::reactive(data),
-      "input_config" = shiny::reactive(barchart_config1),
-      "entity" = shiny::reactive("Files"),
-      "name" = shiny::reactive("Plot 1")
+      "input_config" = shiny::reactive(list("x_attribute" = "assay"))
     ),
     {
-
       session$setInputs("x_attribute-attribute_choice" = "assay")
       session$setInputs("color_attribute-attribute_choice" = "none")
       session$setInputs("group_attribute-attribute_choice" = "none")
@@ -74,12 +57,7 @@ test_that("admin_barchart_module_server_no_group_or_color_with_config", {
 
       expect_equal(
         session$getReturned()(),
-        list(
-          "type" = "barchart",
-          "entity" = "Files",
-          "name" = "Plot 1",
-          "x_attribute" = "assay"
-        )
+        list("x_attribute" = "assay" )
       )
     }
   )
@@ -90,12 +68,9 @@ test_that("admin_barchart_module_server_with_group", {
     admin_barchart_module_server,
     args = list(
       "data" = shiny::reactive(data),
-      "input_config" = shiny::reactive(NULL),
-      "entity" = shiny::reactive("Files"),
-      "name" = shiny::reactive("Plot 1")
+      "input_config" = shiny::reactive(NULL)
     ),
     {
-
       session$setInputs("x_attribute-attribute_choice" = "assay")
       session$setInputs("color_attribute-attribute_choice" = "none")
       session$setInputs("group_attribute-attribute_choice" = "file_format")
@@ -112,9 +87,6 @@ test_that("admin_barchart_module_server_with_group", {
       expect_equal(
         session$getReturned()(),
         list(
-          "type" = "barchart",
-          "entity" = "Files",
-          "name" = "Plot 1",
           "x_attribute" = "assay",
           "group_attribute" = "file_format"
         )
@@ -128,9 +100,7 @@ test_that("admin_barchart_module_server_with_group_and_color", {
     admin_barchart_module_server,
     args = list(
       "data" = shiny::reactive(data),
-      "input_config" = shiny::reactive(NULL),
-      "entity" = shiny::reactive("Files"),
-      "name" = shiny::reactive("Plot 1")
+      "input_config" = shiny::reactive(NULL)
     ),
     {
       session$setInputs("x_attribute-attribute_choice" = "assay")
@@ -147,9 +117,6 @@ test_that("admin_barchart_module_server_with_group_and_color", {
       expect_equal(
         session$getReturned()(),
         list(
-          "type" = "barchart",
-          "entity" = "Files",
-          "name" = "Plot 1",
           "x_attribute" = "assay",
           "group_attribute" = "file_format",
           "color_attribute" = "year"

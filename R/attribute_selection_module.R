@@ -74,6 +74,7 @@ attribute_selection_module_server <- function(
           !is.null(attribute_default()),
           validated_choices()
         )
+
         shiny::selectInput(
           inputId  = ns("attribute_choice"),
           label    = ui_label(),

@@ -4,19 +4,9 @@
 \alias{create_barchart_config}
 \title{Create Barchart Config}
 \usage{
-create_barchart_config(
-  entity,
-  name,
-  x_attribute,
-  group_attribute,
-  color_attribute
-)
+create_barchart_config(x_attribute, group_attribute, color_attribute)
 }
 \arguments{
-\item{entity}{A string}
-
-\item{name}{A string}
-
 \item{x_attribute}{A stirng}
 
 \item{group_attribute}{A string}

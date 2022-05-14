@@ -4,18 +4,12 @@
 \alias{admin_datatable_module_server}
 \title{Admin Data Table Module Server}
 \usage{
-admin_datatable_module_server(id, data, config, entity, name)
+admin_datatable_module_server(id, input_config)
 }
 \arguments{
 \item{id}{A shiny id}
 
-\item{data}{A shiny::reactive that returns a data frame}
-
-\item{config}{A shiny::reactive that returns a named list or Null.}
-
-\item{entity}{A shiny::reactive that returns a string}
-
-\item{name}{A shiny::reactive that returns a string}
+\item{input_config}{A shiny::reactive that returns a named list or Null.}
 }
 \description{
 Admin Data Table Module Server

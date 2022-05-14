@@ -1,7 +1,23 @@
 {
   "plots": [
-    {"name":"Plot 1","type":"barchart","entity":"Files","x_attribute":"initiative"},
-    {"name":"Plot 2","type":"barchart","entity":"Studies","x_attribute":"initiative"},
-    {"name":"Data Table 1","type":"datatable","entity":"Files"}
+    {
+      "name":"Plot 1",
+      "entity":"Files",
+      "barchart":{
+        "x_attribute":"initiative"
+      }
+    },
+    {
+      "name":"Plot 2",
+      "entity":"Studies",
+      "barchart": {
+        "x_attribute":"initiative"
+      }
+    },
+    {
+      "name":"Data Table 1",
+      "entity":"Files",
+      "datatable": {}
+    }
   ]
 }

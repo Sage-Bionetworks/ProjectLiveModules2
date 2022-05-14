@@ -7,9 +7,7 @@ data <-
   readRDS() %>%
   purrr::pluck("Files")
 
-config <- list(
-  "name" = "test_box_title"
-)
+config <- list()
 
 test_that("datatable_module_server", {
   shiny::testServer(
@@ -19,7 +17,6 @@ test_that("datatable_module_server", {
       "config" = shiny::reactive(config)
     ),
     {
-      expect_equal(box_title(), "test_box_title")
       expect_type(output$datatable, "character")
     }
   )

@@ -5,44 +5,31 @@
 #' @export
 datatable_module_ui <- function(id){
   ns <- shiny::NS(id)
-
-  shinydashboard::box(
-    width = 12,
-    solidHeader = TRUE,
-    status = "primary",
-    title = shiny::textOutput(ns("box_title")),
-    DT::dataTableOutput(ns("datatable"))
-  )
-
+  DT::dataTableOutput(ns("datatable"))
 }
 
 #' Data Table Module UI
 #'
 #' @param id A shiny id
-#' @param config A shiny::reactive that returns a named list:
-#'  - "name": a title for the shinydashboard::box
+#' @param config A shiny::reactive that returns a list
 #' @param data A shiny::reactive that returns A data frame.
+#' @param do_plot A shiny::reactive that returns a logical.
 #'
 #' @export
-datatable_module_server <- function(id, config, data){
+datatable_module_server <- function(
+    id, config, data, do_plot = shiny::reactive(T)
+){
   shiny::moduleServer(
     id,
     function(input, output, session) {
       ns <- session$ns
 
-      box_title <- shiny::reactive({
-        if(is.null(config()$name)) title <- "Datatable"
-        else title <- config()$name
-        return(title)
-      })
-
-      output$box_title <- shiny::renderText(box_title())
-
       output$datatable <- DT::renderDataTable({
-        shiny::req(data())
+        shiny::req(data(), do_plot())
         data()
       })
 
+      return(T)
     }
   )
 }
