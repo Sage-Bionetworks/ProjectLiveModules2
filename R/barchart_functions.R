@@ -1,17 +1,12 @@
 #' Create Barchart Config
 #'
-#' @param entity A string
 #' @param x_attribute A stirng
 #' @param group_attribute A string
 #' @param color_attribute A string
 create_barchart_config <- function(
-    entity, x_attribute, group_attribute, color_attribute
+    x_attribute, group_attribute, color_attribute
 ){
-  config <- list(
-    "type" = "barchart",
-    "entity" = entity,
-    "x_attribute" = x_attribute
-  )
+  config <- list("x_attribute" = x_attribute)
 
   if(group_attribute != "none") {
     config <- c(config, list("group_attribute" = group_attribute))
@@ -183,6 +178,5 @@ create_plotly_barchart <- function(
       barmode = 'stack',
       showlegend = showlegend
     )
-
   return(p)
 }

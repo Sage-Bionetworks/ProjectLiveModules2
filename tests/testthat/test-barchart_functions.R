@@ -5,29 +5,21 @@ data <-
 
 test_that("create_barchart_config", {
   expect_equal(
-    create_barchart_config("Files", "assay", "none", "none"),
-    list(
-      "type" = "barchart",
-      "entity" = "Files",
-      "x_attribute" = "assay"
-    )
+    create_barchart_config("assay", "none", "none"),
+    list("x_attribute" = "assay")
   )
 
   expect_equal(
-    create_barchart_config("Files", "assay", "file", "none"),
+    create_barchart_config("assay", "file", "none"),
     list(
-      "type" = "barchart",
-      "entity" = "Files",
       "x_attribute" = "assay",
       "group_attribute" = "file"
     )
   )
 
   expect_equal(
-    create_barchart_config("Files", "assay", "none", "file"),
+    create_barchart_config("assay",  "none", "file"),
     list(
-      "type" = "barchart",
-      "entity" = "Files",
       "x_attribute" = "assay",
       "color_attribute" = "file"
     )

@@ -8,7 +8,6 @@ data <-
   purrr::pluck("Files")
 
 config <- list(
-  "name" = "test_box_title",
   "x_attribute" = "assay"
 )
 
@@ -20,7 +19,8 @@ test_that("barchart_module_server", {
       "config" = shiny::reactive(config)
     ),
     {
-      expect_equal(box_title(), "test_box_title")
+      expect_type(validated_config(), "list")
+      expect_true(tibble::is_tibble(validated_data()))
       expect_type(output$plot, "character")
     }
   )

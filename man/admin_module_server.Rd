@@ -9,7 +9,7 @@ admin_module_server(id, data)
 \arguments{
 \item{id}{A shiny id}
 
-\item{data}{A named list of data frames}
+\item{data}{a shiny::reactive that returns a named list of data frames}
 }
 \description{
 Admin Module Server

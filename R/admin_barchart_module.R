@@ -6,19 +6,16 @@
 admin_barchart_module_ui <- function(id){
   ns <- shiny::NS(id)
 
-  shiny::tagList(
-    shiny::fluidRow(
-      shinydashboard::box(
-        width = 12,
-        solidHeader = TRUE,
-        status = "warning",
-        title = "Barchart Controls",
-        shiny::uiOutput(ns("x_attribute_ui")),
-        shiny::uiOutput(ns("color_attribute_ui")),
-        shiny::uiOutput(ns("group_attribute_ui"))
-      )
-    ),
-    shiny::fluidRow(barchart_module_ui(ns("barchart")))
+  shiny::fluidRow(
+    shinydashboard::box(
+      width = 12,
+      solidHeader = TRUE,
+      status = "warning",
+      title = "Barchart Controls",
+      attribute_selection_module_ui(ns("x_attribute")),
+      attribute_selection_module_ui(ns("color_attribute")),
+      attribute_selection_module_ui(ns("group_attribute"))
+    )
   )
 
 }
@@ -27,11 +24,11 @@ admin_barchart_module_ui <- function(id){
 #' Admin Barchart Module Server
 #'
 #' @param id A shiny id
-#' @param data A data frame
-#' @param entity A string
+#' @param data A shiny::reactive that returns a data frame
+#' @param input_config A shiny::reactive that returns a named list or Null.
 #'
 #' @export
-admin_barchart_module_server <- function(id, data, entity){
+admin_barchart_module_server <- function(id, data, input_config){
   shiny::moduleServer(
     id,
     function(input, output, session) {
@@ -39,90 +36,69 @@ admin_barchart_module_server <- function(id, data, entity){
 
       #TODO: replace this with schematic API call
       column_choices <- shiny::reactive({
-        shiny::req(entity())
-
-        entity_columns <- list(
-          "Files" = c(
-            "Assay" = "assay",
-            "Access Type" = "access_type",
-            "Year" = "year",
-            "Study ID" = "study_id"
-          ),
-          "Publications" = c(
-            "Assay" = "assay",
-            "Year" = "year",
-            "Study ID" = "study_id"
-          ),
-          "Tools" = c(
-            "Study ID" = "study_id"
-          ),
-          "Studies" = c(
-            "Initiative" = "initiative"
-          )
-        )
-
-        entity_columns %>%
-          purrr::pluck(entity())
+        shiny::req(data())
+        choices <- colnames(data())
+        names <- stringr::str_to_title(colnames(data()))
+        purrr::set_names(choices, names)
       })
 
+      x_attribute <- attribute_selection_module_server(
+        "x_attribute",
+        input_config,
+        shiny::reactive("x_attribute"),
+        column_choices,
+        ui_label = shiny::reactive("Select x attribute")
+      )
 
-      output$x_attribute_ui <- shiny::renderUI({
-        shiny::req(column_choices)
-        shiny::selectInput(
-          inputId  = ns("x_attribute"),
-          label    = "Select attribute to use as x column.",
-          choices  = column_choices()
-        )
-      })
-
-      output$color_attribute_ui <- shiny::renderUI({
-        shiny::req(column_choices, input$x_attribute)
+      # adds none and removes x_attribute from list
+      color_column_choices <- shiny::reactive({
+        shiny::req(column_choices(), x_attribute())
         choices <- c("None" = "none", column_choices())
-        choices <- choices[input$x_attribute != choices]
-
-        shiny::selectInput(
-          inputId  = ns("color_attribute"),
-          label    = "Select attribute to use as barchart color.",
-          choices  = choices
-        )
+        choices <- choices[x_attribute() != choices]
+        return(choices)
       })
 
-      output$group_attribute_ui <- shiny::renderUI({
-        shiny::req(column_choices, input$x_attribute)
-        choices <- c("None" = "none", column_choices())
-        choices <- choices[input$x_attribute != choices]
+      color_attribute <- attribute_selection_module_server(
+        "color_attribute",
+        input_config,
+        shiny::reactive("color_attribute"),
+        color_column_choices,
+        ui_label = shiny::reactive("Select color attribute")
+      )
 
-        shiny::selectInput(
-          inputId  = ns("group_attribute"),
-          label    = "Select attribute to use as barchart grouping.",
-          choices  = choices
-        )
+      # removes color choice from list if not "none"
+      group_column_choices <- shiny::reactive({
+        shiny::req(color_column_choices(), color_attribute())
+        choices <- color_column_choices()
+        if(color_attribute() != "none"){
+          choices <- choices[color_attribute() != choices]
+        }
+        return(choices)
       })
 
+      group_attribute <- attribute_selection_module_server(
+        "group_attribute",
+        input_config,
+        shiny::reactive("group_attribute"),
+        group_column_choices,
+        ui_label = shiny::reactive("Select group attribute")
+      )
 
-      config <- shiny::reactive({
+      output_config <- shiny::reactive({
         shiny::req(
-          entity(),
-          input$x_attribute,
-          input$group_attribute,
-          input$color_attribute
+          x_attribute(),
+          group_attribute(),
+          color_attribute()
         )
 
         create_barchart_config(
-          entity(),
-          input$x_attribute,
-          input$group_attribute,
-          input$color_attribute
+          x_attribute(),
+          group_attribute(),
+          color_attribute()
         )
       })
 
-      barchart_module_server(
-        "barchart",
-        data,
-        config
-      )
-
-      return(config)
+      return(output_config)
 
     }
   )

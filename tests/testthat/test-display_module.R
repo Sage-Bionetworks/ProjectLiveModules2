@@ -6,22 +6,62 @@ data <-
   testthat::test_path("RDS", "data.rds") %>%
   readRDS()
 
-config <-
+configs <-
   testthat::test_path("JSON", "test.json") %>%
   jsonlite::read_json() %>%
-  purrr::pluck("plots", 1)
+  purrr::pluck("plots")
 
+config1 <- configs[[1]]
+config2 <- configs[[2]]
+config3 <- configs[[3]]
 
-
-test_that("display_module_server", {
+test_that("display_module_server1", {
   shiny::testServer(
     display_module_server,
     args = list(
       "data" = shiny::reactive(data),
-      "config" = shiny::reactive(config)
+      "config" = shiny::reactive(config1)
+    ),
+    {
+      expect_type(validated_config(), "list")
+      expect_type(validated_data(), "list")
+
+      expect_true(tibble::is_tibble(selected_data()))
+      expect_equal(box_title(), "Plot 1")
+      expect_equal(plot_type(), "barchart")
+      expect_equal(plot_config(), list("x_attribute" = "initiative"))
+    }
+  )
+})
+
+test_that("display_module_server2", {
+  shiny::testServer(
+    display_module_server,
+    args = list(
+      "data" = shiny::reactive(data),
+      "config" = shiny::reactive(config2)
     ),
     {
       expect_true(tibble::is_tibble(selected_data()))
+      expect_equal(box_title(), "Plot 2")
+      expect_equal(plot_type(), "barchart")
+      expect_equal(plot_config(), list("x_attribute" = "initiative"))
+    }
+  )
+})
+
+test_that("display_module_server3", {
+  shiny::testServer(
+    display_module_server,
+    args = list(
+      "data" = shiny::reactive(data),
+      "config" = shiny::reactive(config3)
+    ),
+    {
+      expect_true(tibble::is_tibble(selected_data()))
+      expect_equal(box_title(), "Data Table 1")
+      expect_equal(plot_type(), "datatable")
+      expect_length(plot_config(), 0)
     }
   )
 })
