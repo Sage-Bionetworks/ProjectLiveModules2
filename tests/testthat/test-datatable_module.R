@@ -8,8 +8,7 @@ data <-
   purrr::pluck("Files")
 
 config <- list(
-  "type" = "datatable",
-  "entity" = "Files"
+  "name" = "test_box_title"
 )
 
 test_that("datatable_module_server", {
@@ -20,6 +19,7 @@ test_that("datatable_module_server", {
       "config" = shiny::reactive(config)
     ),
     {
+      expect_equal(box_title(), "test_box_title")
       expect_type(output$datatable, "character")
     }
   )

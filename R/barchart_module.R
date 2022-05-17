@@ -10,7 +10,7 @@ barchart_module_ui <- function(id){
     width = 12,
     solidHeader = TRUE,
     status = "primary",
-    title = "Barchart",
+    title = shiny::textOutput(ns("box_title")),
     plotly::plotlyOutput(ns("plot"))
   )
 
@@ -19,11 +19,12 @@ barchart_module_ui <- function(id){
 #' Barchart Module Server
 #'
 #' @param id A shiny id
-#' @param data A data frame
-#' @param config A named list. All values must be columns in data:
-#'  - "x_attribute" (required)
-#'  - "color_attribute"
-#'  - "group_attribute"
+#' @param data A shiny::reactive that returns A data frame.
+#' @param config A shiny::reactive that returns a named list:
+#'  - "name": a title for the shinydashboard::box
+#'  - "x_attribute": Column in data param (required)
+#'  - "color_attribute": Column in data param
+#'  - "group_attribute": Column in data param
 #'
 #' @export
 barchart_module_server <- function(id, data, config){
@@ -31,6 +32,14 @@ barchart_module_server <- function(id, data, config){
     id,
     function(input, output, session) {
       ns <- session$ns
+
+      box_title <- shiny::reactive({
+        if(is.null(config()$name)) title <- "Barchart"
+        else title <- config()$name
+        return(title)
+      })
+
+      output$box_title <- shiny::renderText(box_title())
 
       output$plot <- plotly::renderPlotly({
         shiny::req(data(), config())

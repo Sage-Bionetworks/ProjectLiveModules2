@@ -4,14 +4,15 @@
 \alias{datatable_module_server}
 \title{Data Table Module UI}
 \usage{
-datatable_module_server(id, data, config)
+datatable_module_server(id, config, data)
 }
 \arguments{
 \item{id}{A shiny id}
 
-\item{data}{A data frame}
+\item{config}{A shiny::reactive that returns a named list:
+- "name": a title for the shinydashboard::box}
 
-\item{config}{A named list}
+\item{data}{A shiny::reactive that returns A data frame.}
 }
 \description{
 Data Table Module UI
