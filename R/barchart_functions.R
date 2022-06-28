@@ -8,10 +8,10 @@ create_barchart_config <- function(
 ){
   config <- list("x_attribute" = x_attribute)
 
-  if(group_attribute != "none") {
+  if (group_attribute != "none") {
     config <- c(config, list("group_attribute" = group_attribute))
   }
-  if(color_attribute != "none") {
+  if (color_attribute != "none") {
     config <- c(config, list("color_attribute" = color_attribute))
   }
 

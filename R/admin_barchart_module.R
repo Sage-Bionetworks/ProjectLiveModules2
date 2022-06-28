@@ -1,8 +1,6 @@
 #' Admin Barchart Module UI
 #'
 #' @param id A shiny id
-#'
-#' @export
 admin_barchart_module_ui <- function(id){
   ns <- shiny::NS(id)
 
@@ -26,8 +24,6 @@ admin_barchart_module_ui <- function(id){
 #' @param id A shiny id
 #' @param data A shiny::reactive that returns a data frame
 #' @param input_config A shiny::reactive that returns a named list or Null.
-#'
-#' @export
 admin_barchart_module_server <- function(id, data, input_config){
   shiny::moduleServer(
     id,
@@ -44,10 +40,10 @@ admin_barchart_module_server <- function(id, data, input_config){
 
       x_attribute <- attribute_selection_module_server(
         "x_attribute",
-        input_config,
-        shiny::reactive("x_attribute"),
-        column_choices,
-        ui_label = shiny::reactive("Select x attribute")
+        config            = input_config,
+        attribute_name    = shiny::reactive("x_attribute"),
+        attribute_choices = column_choices,
+        ui_label          = shiny::reactive("Select x attribute")
       )
 
       # adds none and removes x_attribute from list
@@ -60,17 +56,17 @@ admin_barchart_module_server <- function(id, data, input_config){
 
       color_attribute <- attribute_selection_module_server(
         "color_attribute",
-        input_config,
-        shiny::reactive("color_attribute"),
-        color_column_choices,
-        ui_label = shiny::reactive("Select color attribute")
+        config            = input_config,
+        attribute_name    = shiny::reactive("color_attribute"),
+        attribute_choices = color_column_choices,
+        ui_label          = shiny::reactive("Select color attribute")
       )
 
       # removes color choice from list if not "none"
       group_column_choices <- shiny::reactive({
         shiny::req(color_column_choices(), color_attribute())
         choices <- color_column_choices()
-        if(color_attribute() != "none"){
+        if (color_attribute() != "none") {
           choices <- choices[color_attribute() != choices]
         }
         return(choices)
@@ -78,10 +74,10 @@ admin_barchart_module_server <- function(id, data, input_config){
 
       group_attribute <- attribute_selection_module_server(
         "group_attribute",
-        input_config,
-        shiny::reactive("group_attribute"),
-        group_column_choices,
-        ui_label = shiny::reactive("Select group attribute")
+        config            = input_config,
+        attribute_name    = shiny::reactive("group_attribute"),
+        attribute_choices = group_column_choices,
+        ui_label          = shiny::reactive("Select group attribute")
       )
 
       output_config <- shiny::reactive({
