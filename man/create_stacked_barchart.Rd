@@ -10,8 +10,9 @@ create_stacked_barchart(data, config)
 \item{data}{A dataframe}
 
 \item{config}{A named list. All values must be columns in data:
-- "x_attribute" (required)
-- "color_attribute" (required)}
+- "x_attribute"
+- "color_attribute"
+- "pallete"}
 }
 \description{
 Create Stacked Barchart

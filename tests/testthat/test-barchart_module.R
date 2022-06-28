@@ -8,7 +8,8 @@ data <-
   purrr::pluck("Files")
 
 config <- list(
-  "x_attribute" = "assay"
+  "x_attribute" = "assay",
+  "pallete" = "viridis"
 )
 
 test_that("barchart_module_server", {

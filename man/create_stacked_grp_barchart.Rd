@@ -10,9 +10,10 @@ create_stacked_grp_barchart(data, config)
 \item{data}{A dataframe}
 
 \item{config}{A named list. All values must be columns in data:
-- "x_attribute" (required)
-- "color_attribute" (required)
-- "group_attribute" (required)}
+- "x_attribute"
+- "color_attribute"
+- "group_attribute"
+- "pallete"}
 }
 \description{
 Create Stacked Grouped Barchart

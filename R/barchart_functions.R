@@ -25,7 +25,8 @@ create_barchart_config <- function(
 #'
 #' @param data A data frame
 #' @param config A named list. All values must be columns in data:
-#'  - "x_attribute" (required)
+#'  - "x_attribute"
+#'  - "pallete"
 create_barchart <- function(data, config) {
   plot_is_grouped <- !is.null(config$group_attribute)
   plot_is_stacked <- !is.null(config$color_attribute)
@@ -46,6 +47,7 @@ create_barchart <- function(data, config) {
 #' @param data A data frame
 #' @param config A named list. All values must be columns in data:
 #'  - "x_attribute" (required)
+#'  - "pallete"
 #'
 #' @importFrom rlang .data
 create_standard_barchart <- function(data, config) {
@@ -53,15 +55,16 @@ create_standard_barchart <- function(data, config) {
     dplyr::select("x" = config$x_attribute) %>%
     tidyr::drop_na() %>%
     dplyr::count(.data$x, name = "y") %>%
-    create_plotly_barchart(text_col = "y")
+    create_plotly_barchart(text_col = "y", pallete = config$pallete)
 }
 
 #' Create Stacked Barchart
 #'
 #' @param data A dataframe
 #' @param config A named list. All values must be columns in data:
-#'  - "x_attribute" (required)
-#'  - "color_attribute" (required)
+#'  - "x_attribute"
+#'  - "color_attribute"
+#'  - "pallete"
 #'
 #' @importFrom rlang .data
 create_stacked_barchart <- function(data, config) {
@@ -72,15 +75,20 @@ create_stacked_barchart <- function(data, config) {
     ) %>%
     tidyr::drop_na() %>%
     dplyr::count(.data$x, .data$color, name = "y") %>%
-    create_plotly_barchart(color_col = "color", text_col = "y")
+    create_plotly_barchart(
+      color_col = "color",
+      text_col = "y",
+      pallete = config$pallete
+    )
 }
 
 #' Create Grouped Barchart
 #'
 #' @param data A dataframe
 #' @param config A named list. All values must be columns in data:
-#'  - "x_attribute" (required)
-#'  - "group_attribute" (required)
+#'  - "x_attribute"
+#'  - "group_attribute"
+#'  - "pallete"
 #'
 #' @importFrom rlang .data
 create_grouped_barchart <- function(data, config) {
@@ -97,7 +105,8 @@ create_grouped_barchart <- function(data, config) {
         plot_data = .,
         text_col = "y",
         xlab = .y$group,
-        showlegend = FALSE
+        showlegend = FALSE,
+        pallete = config$pallete
       )
     ) %>%
     plotly::subplot(nrows = 1, shareX = TRUE, shareY = TRUE) %>%
@@ -108,9 +117,10 @@ create_grouped_barchart <- function(data, config) {
 #'
 #' @param data A dataframe
 #' @param config A named list. All values must be columns in data:
-#'  - "x_attribute" (required)
-#'  - "color_attribute" (required)
-#'  - "group_attribute" (required)
+#'  - "x_attribute"
+#'  - "color_attribute"
+#'  - "group_attribute"
+#'  - "pallete"
 #'
 #' @importFrom rlang .data
 create_stacked_grp_barchart <- function(data, config) {
@@ -129,7 +139,8 @@ create_stacked_grp_barchart <- function(data, config) {
         color_col = "color",
         text_col = "y",
         xlab = .y$group,
-        showlegend = FALSE
+        showlegend = FALSE,
+        pallete = config$pallete
       )
     ) %>%
     plotly::subplot(nrows = 1, shareX = TRUE, shareY = TRUE) %>%
@@ -147,8 +158,8 @@ create_stacked_grp_barchart <- function(data, config) {
 #' @param xlab A string
 #' @param ylab A string
 #' @param title A string
-#' @param bar_colors A string or NULL
 #' @param showlegend True or False
+#' @param pallete A name of a viridis() pallete
 #'
 #' @importFrom magrittr %>%
 create_plotly_barchart <- function(
@@ -161,8 +172,8 @@ create_plotly_barchart <- function(
     xlab = "",
     ylab = "",
     title = "",
-    bar_colors = NULL,
-    showlegend = TRUE
+    showlegend = TRUE,
+    pallete = "viridis"
 ) {
 
   select_cols <- c(
@@ -174,13 +185,7 @@ create_plotly_barchart <- function(
   )
 
   plot_data <- dplyr::select(plot_data, dplyr::all_of(select_cols))
-
-  if (is.null(bar_colors)) {
-    bar_colors <- plot_data %>%
-      dplyr::select("color") %>%
-      dplyr::n_distinct() %>%
-      viridis::viridis_pal(option = "D")()
-  }
+  bar_colors <- get_viridis_colors_from_tbl(plot_data, pallete)
 
   p <- plotly::plot_ly(
     plot_data,

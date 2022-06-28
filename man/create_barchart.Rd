@@ -10,7 +10,8 @@ create_barchart(data, config)
 \item{data}{A data frame}
 
 \item{config}{A named list. All values must be columns in data:
-- "x_attribute" (required)}
+- "x_attribute"
+- "pallete"}
 }
 \description{
 Creates a barchart based on the attributes in the config
