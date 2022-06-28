@@ -7,6 +7,6 @@ get_value_from_list <- function(lst, value, default = NA){
     is.null(value),
     is.null(lst[[value]])
   )
-  if(return_default) return(default)
+  if (return_default) return(default)
   else return(lst[[value]])
 }

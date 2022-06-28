@@ -28,22 +28,22 @@ barchart_module_server <- function(
 
       validated_config <- shiny::reactive({
         shiny::req(config(), do_plot())
-        if(!shiny::is.reactive(config)) stop("config is not reactive")
+        if (!shiny::is.reactive(config)) stop("config is not reactive")
         malformed_config <- any(
           length(config()) == 0,
           is.null(config()[["x_attribute"]])
         )
-        if(malformed_config) stop("config is malformed")
+        if (malformed_config) stop("config is malformed")
         return(config())
       })
 
       validated_data <- shiny::reactive({
         shiny::req(data(), do_plot())
-        if(!shiny::is.reactive(data)) stop("data is not reactive")
+        if (!shiny::is.reactive(data)) stop("data is not reactive")
         malformed_data <- any(
           !tibble::is_tibble(data())
         )
-        if(malformed_data) stop("config is malformed")
+        if (malformed_data) stop("config is malformed")
         return(data())
       })
 
@@ -56,9 +56,9 @@ barchart_module_server <- function(
         plot_is_grouped <- !is.null(config$group_attribute)
         plot_is_stacked <- !is.null(config$color_attribute)
 
-        if(plot_is_grouped && plot_is_stacked){
+        if (plot_is_grouped && plot_is_stacked) {
           return(create_stacked_grouped_barchart(data, config))
-        } else if(plot_is_grouped){
+        } else if (plot_is_grouped) {
           return(create_grouped_barchart(data, config))
         } else if (plot_is_stacked) {
           return(create_stacked_barchart(data, config))

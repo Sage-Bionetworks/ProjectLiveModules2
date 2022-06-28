@@ -83,10 +83,7 @@ display_module_server <- function(id, config, data){
 
       plot_type <- shiny::reactive({
         shiny::req(validated_config())
-        config <- validated_config()
-        if("barchart" %in% names(config)) plot_type <- "barchart"
-        if("datatable" %in% names(config)) plot_type <- "datatable"
-        return(plot_type)
+        get_plot_type(validated_config())
       })
 
       output$plot_type <- shiny::reactive(plot_type())
