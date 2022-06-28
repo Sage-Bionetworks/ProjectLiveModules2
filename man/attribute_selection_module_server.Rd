@@ -20,12 +20,13 @@ attribute_selection_module_server(
 
 \item{attribute_name}{A shiny::reactive that returns a string}
 
-\item{attribute_choices}{A shiny::reactive that returns a named list}
+\item{attribute_choices}{A shiny::reactive that returns a named character()}
 
 \item{attribute_input_default}{A shiny::reactive that returns a string or NA}
 
 \item{ui_label}{A shiny::reactive that returns a string}
 }
 \description{
-Attribute Selection Module Server
+This module is used to allow the user to select an attribute from a list. If
+a config is supplied, the default will come from it.
 }
