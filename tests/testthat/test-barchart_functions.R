@@ -31,7 +31,7 @@ test_that("create_barchart_config", {
 test_that("create_standard_barchart", {
   fig <- create_standard_barchart(
     data,
-    list("x_attribute" = "assay", "pallete" = "viridis")
+    list("x_attribute" = "assay", "palette" = "viridis")
   )
   expect_type(fig, "list")
   print(fig)
@@ -43,7 +43,7 @@ test_that("create_stacked_barchart", {
     list(
       "x_attribute" = "assay",
       "color_attribute" = "file_format",
-      "pallete" = "viridis"
+      "palette" = "viridis"
     )
   )
   expect_type(fig, "list")
@@ -56,7 +56,7 @@ test_that("create_grouped_barchart", {
     list(
       "x_attribute" = "assay",
       "group_attribute" = "file_format",
-      "pallete" = "viridis"
+      "palette" = "viridis"
     )
   )
   expect_type(fig, "list")
@@ -70,7 +70,7 @@ test_that("create_stacked_grp_barchart", {
       "x_attribute" = "assay",
       "group_attribute" = "file_format",
       "color_attribute" = "access_type",
-      "pallete" = "viridis"
+      "palette" = "viridis"
     )
   )
   expect_type(fig, "list")

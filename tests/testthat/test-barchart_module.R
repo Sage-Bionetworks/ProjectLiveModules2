@@ -20,6 +20,7 @@ test_that("barchart_module_server", {
       "config" = shiny::reactive(config)
     ),
     {
+      session$setInputs("palette_choice" = "magma")
       expect_type(validated_config(), "list")
       expect_true(tibble::is_tibble(validated_data()))
       expect_type(output$plot, "character")

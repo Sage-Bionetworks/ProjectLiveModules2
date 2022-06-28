@@ -4,15 +4,16 @@
 \alias{create_grouped_barchart}
 \title{Create Grouped Barchart}
 \usage{
-create_grouped_barchart(data, config)
+create_grouped_barchart(data, config, palette = "viridis")
 }
 \arguments{
 \item{data}{A dataframe}
 
 \item{config}{A named list. All values must be columns in data:
 - "x_attribute"
-- "group_attribute"
-- "pallete"}
+- "group_attribute"}
+
+\item{palette}{A name of a viridis() palette}
 }
 \description{
 Create Grouped Barchart

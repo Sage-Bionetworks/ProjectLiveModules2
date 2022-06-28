@@ -15,7 +15,7 @@ create_plotly_barchart(
   ylab = "",
   title = "",
   showlegend = TRUE,
-  pallete = "viridis"
+  palette = "viridis"
 )
 }
 \arguments{
@@ -39,7 +39,7 @@ create_plotly_barchart(
 
 \item{showlegend}{True or False}
 
-\item{pallete}{A name of a viridis() pallete}
+\item{palette}{A name of a viridis() palette}
 }
 \description{
 Create Plotly Barchart

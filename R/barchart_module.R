@@ -5,7 +5,10 @@
 #' @export
 barchart_module_ui <- function(id) {
   ns <- shiny::NS(id)
-  plotly::plotlyOutput(ns("plot"))
+  shiny::tagList(
+    shiny::uiOutput(ns("palette_ui")),
+    plotly::plotlyOutput(ns("plot"))
+  )
 }
 
 #' Barchart Module Server
@@ -24,6 +27,7 @@ barchart_module_server <- function(
   shiny::moduleServer(
     id,
     function(input, output, session) {
+      ns <- session$ns
 
       validated_config <- shiny::reactive({
         shiny::req(config(), do_plot())
@@ -46,9 +50,21 @@ barchart_module_server <- function(
         return(data())
       })
 
+      output$palette_ui <- shiny::renderUI({
+        shiny::selectInput(
+          inputId  = ns("palette_choice"),
+          label    = "Select palette for plot",
+          choices  = get_viridis_palette_options()
+        )
+      })
+
       plot <- shiny::reactive({
-        shiny::req(validated_config(), validated_data())
-        create_barchart(validated_data(), validated_config())
+        shiny::req(validated_config(), validated_data(), input$palette_choice)
+        create_barchart(
+          validated_data(),
+          validated_config(),
+          input$palette_choice
+        )
       })
 
       output$plot <- plotly::renderPlotly(plot())

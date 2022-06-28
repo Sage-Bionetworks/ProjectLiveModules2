@@ -4,15 +4,16 @@
 \alias{create_stacked_barchart}
 \title{Create Stacked Barchart}
 \usage{
-create_stacked_barchart(data, config)
+create_stacked_barchart(data, config, palette = "viridis")
 }
 \arguments{
 \item{data}{A dataframe}
 
 \item{config}{A named list. All values must be columns in data:
 - "x_attribute"
-- "color_attribute"
-- "pallete"}
+- "color_attribute"}
+
+\item{palette}{A name of a viridis() palette}
 }
 \description{
 Create Stacked Barchart

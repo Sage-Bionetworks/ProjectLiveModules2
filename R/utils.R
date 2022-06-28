@@ -25,9 +25,26 @@ get_value_from_list <- function(lst, value, default = NA) {
 #'
 #' @param table A dataframe with column "color"
 #' @param pallete A name of a viridis() pallete
-get_viridis_colors_from_tbl <- function(table, pallete = "viridis"){
+get_viridis_colors_from_tbl <- function(table, pallete = "viridis") {
   table %>%
     dplyr::select("color") %>%
     dplyr::n_distinct() %>%
     viridis::viridis_pal(option = pallete)()
+}
+
+#' Get Viridis Palette Options
+#'
+#' Returns the list of viridis palletes
+get_viridis_palette_options <- function() {
+  c(
+    "magma",
+    "inferno",
+    "plasma",
+    "viridis",
+    "cividis",
+    "rocket",
+    "mako",
+    "turbo"
+  ) %>%
+    purrr::set_names(stringr::str_to_title(.))
 }
