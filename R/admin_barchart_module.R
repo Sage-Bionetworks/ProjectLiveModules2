@@ -1,7 +1,7 @@
 #' Admin Barchart Module UI
 #'
 #' @param id A shiny id
-admin_barchart_module_ui <- function(id){
+admin_barchart_module_ui <- function(id) {
   ns <- shiny::NS(id)
 
   shiny::fluidRow(
@@ -10,9 +10,9 @@ admin_barchart_module_ui <- function(id){
       solidHeader = TRUE,
       status = "warning",
       title = "Barchart Controls",
-      attribute_selection_module_ui(ns("x_attribute")),
-      attribute_selection_module_ui(ns("color_attribute")),
-      attribute_selection_module_ui(ns("group_attribute"))
+      attribute_sel_module_ui(ns("x_attribute")),
+      attribute_sel_module_ui(ns("color_attribute")),
+      attribute_sel_module_ui(ns("group_attribute"))
     )
   )
 
@@ -24,11 +24,10 @@ admin_barchart_module_ui <- function(id){
 #' @param id A shiny id
 #' @param data A shiny::reactive that returns a data frame
 #' @param input_config A shiny::reactive that returns a named list or Null.
-admin_barchart_module_server <- function(id, data, input_config){
+admin_barchart_module_server <- function(id, data, input_config) {
   shiny::moduleServer(
     id,
     function(input, output, session) {
-      ns <- session$ns
 
       #TODO: replace this with schematic API call
       column_choices <- shiny::reactive({
@@ -38,7 +37,7 @@ admin_barchart_module_server <- function(id, data, input_config){
         purrr::set_names(choices, names)
       })
 
-      x_attribute <- attribute_selection_module_server(
+      x_attribute <- attribute_sel_module_server(
         "x_attribute",
         config            = input_config,
         attribute_name    = shiny::reactive("x_attribute"),
@@ -54,7 +53,7 @@ admin_barchart_module_server <- function(id, data, input_config){
         return(choices)
       })
 
-      color_attribute <- attribute_selection_module_server(
+      color_attribute <- attribute_sel_module_server(
         "color_attribute",
         config            = input_config,
         attribute_name    = shiny::reactive("color_attribute"),
@@ -72,7 +71,7 @@ admin_barchart_module_server <- function(id, data, input_config){
         return(choices)
       })
 
-      group_attribute <- attribute_selection_module_server(
+      group_attribute <- attribute_sel_module_server(
         "group_attribute",
         config            = input_config,
         attribute_name    = shiny::reactive("group_attribute"),

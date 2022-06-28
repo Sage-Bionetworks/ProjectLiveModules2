@@ -15,7 +15,8 @@ Suggests:
     renv,
     devtools,
     usethis,
-    tibble (>= 3.0)
+    tibble (>= 3.0),
+    lintr
 Imports:
   dplyr (>= 1.0),
   DT (>= 0.2),

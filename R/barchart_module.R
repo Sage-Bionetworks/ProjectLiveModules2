@@ -3,7 +3,7 @@
 #' @param id A shiny id
 #'
 #' @export
-barchart_module_ui <- function(id){
+barchart_module_ui <- function(id) {
   ns <- shiny::NS(id)
   plotly::plotlyOutput(ns("plot"))
 }
@@ -19,12 +19,11 @@ barchart_module_ui <- function(id){
 #' @param do_plot A shiny::reactive that returns a logical.
 #' @export
 barchart_module_server <- function(
-    id, config, data, do_plot = shiny::reactive(T)
-){
+    id, config, data, do_plot = shiny::reactive(TRUE)
+) {
   shiny::moduleServer(
     id,
     function(input, output, session) {
-      ns <- session$ns
 
       validated_config <- shiny::reactive({
         shiny::req(config(), do_plot())
@@ -47,27 +46,14 @@ barchart_module_server <- function(
         return(data())
       })
 
-      output$plot <- plotly::renderPlotly({
+      plot <- shiny::reactive({
         shiny::req(validated_config(), validated_data())
-
-        config <- validated_config()
-        data <- validated_data()
-
-        plot_is_grouped <- !is.null(config$group_attribute)
-        plot_is_stacked <- !is.null(config$color_attribute)
-
-        if (plot_is_grouped && plot_is_stacked) {
-          return(create_stacked_grouped_barchart(data, config))
-        } else if (plot_is_grouped) {
-          return(create_grouped_barchart(data, config))
-        } else if (plot_is_stacked) {
-          return(create_stacked_barchart(data, config))
-        } else{
-          return(create_standard_barchart(data, config))
-        }
+        create_barchart(validated_data(), validated_config())
       })
 
-      return(T)
+      output$plot <- plotly::renderPlotly(plot())
+
+      return(TRUE)
     }
   )
 }

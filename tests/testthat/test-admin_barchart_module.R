@@ -57,7 +57,7 @@ test_that("admin_barchart_module_server_no_group_or_color_with_config", {
 
       expect_equal(
         session$getReturned()(),
-        list("x_attribute" = "assay" )
+        list("x_attribute" = "assay")
       )
     }
   )

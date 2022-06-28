@@ -39,7 +39,9 @@ test_that("admin_module_server_barchart_no_json_input", {
       session$setInputs("entity_choice-attribute_choice" = "Files")
       session$setInputs("name_choice" = "Plot 1")
       session$setInputs("barchart-x_attribute-attribute_choice" = "assay")
-      session$setInputs("barchart-color_attribute-attribute_choice" = "file_format")
+      session$setInputs(
+        "barchart-color_attribute-attribute_choice" = "file_format"
+      )
       session$setInputs("barchart-group_attribute-attribute_choice" = "year")
 
       # other input
@@ -66,13 +68,15 @@ test_that("admin_module_server_barchart_with_json_input", {
     ),
     {
       session$setInputs("json-config_method_choice" = "upload")
-      session$setInputs("json-json_upload"= list(datapath = "JSON/test.json"))
+      session$setInputs("json-json_upload" = list(datapath = "JSON/test.json"))
       session$setInputs("json-config_choice" = "Plot 1")
       session$setInputs("display_choice-attribute_choice" = "barchart")
       session$setInputs("entity_choice-attribute_choice" = "Files")
       session$setInputs("name_choice" = "Plot 1")
       session$setInputs("barchart-x_attribute-attribute_choice" = "assay")
-      session$setInputs("barchart-color_attribute-attribute_choice" = "file_format")
+      session$setInputs(
+        "barchart-color_attribute-attribute_choice" = "file_format"
+      )
       session$setInputs("barchart-group_attribute-attribute_choice" = "year")
 
       # other input
@@ -99,7 +103,7 @@ test_that("admin_module_server_datatable_with_json_input", {
     ),
     {
       session$setInputs("json-config_method_choice" = "upload")
-      session$setInputs("json-json_upload"= list(datapath = "JSON/test.json"))
+      session$setInputs("json-json_upload" = list(datapath = "JSON/test.json"))
       session$setInputs("json-config_choice" = "Data Table 1")
       session$setInputs("display_choice-attribute_choice" = "datatable")
       session$setInputs("entity_choice-attribute_choice" = "Files")
@@ -117,4 +121,3 @@ test_that("admin_module_server_datatable_with_json_input", {
     }
   )
 })
-

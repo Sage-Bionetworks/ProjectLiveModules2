@@ -4,7 +4,7 @@
 \alias{barchart_module_server}
 \title{Barchart Module Server}
 \usage{
-barchart_module_server(id, config, data, do_plot = shiny::reactive(T))
+barchart_module_server(id, config, data, do_plot = shiny::reactive(TRUE))
 }
 \arguments{
 \item{id}{A shiny id}

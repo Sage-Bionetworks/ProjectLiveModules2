@@ -1,4 +1,11 @@
-get_value_from_list <- function(lst, value, default = NA){
+#' Get Value From List
+#'
+#' Gets the value from the list, or returns the default value if unable
+#'
+#' @param lst A named list
+#' @param value The name of the value
+#' @param default The default return value
+get_value_from_list <- function(lst, value, default = NA) {
   return_default <- any(
     is.na(lst),
     is.na(value),

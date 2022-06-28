@@ -3,7 +3,7 @@
 #' @param id A shiny id
 #'
 #' @export
-json_module_ui <- function(id){
+json_module_ui <- function(id) {
   ns <- shiny::NS(id)
 
   shiny::tagList(
@@ -46,7 +46,7 @@ json_module_ui <- function(id){
 #' @param id A shiny id
 #'
 #' @export
-json_module_server <- function(id){
+json_module_server <- function(id) {
   shiny::moduleServer(
     id,
     function(input, output, session) {
@@ -79,20 +79,20 @@ json_module_server <- function(id){
       })
 
       selected_config <- shiny::reactive({
-        if(input$config_method_choice == "none") return(NULL)
+        if (input$config_method_choice == "none") return(NULL)
         shiny::req(config_list(), input$config_choice)
         lst <- purrr::keep(
           config_list(),
           function(x) x$name == input$config_choice
         )
-        if(length(lst) == 0L) stop("No matching configs")
-        if(length(lst) > 1L) stop("Too many matching configs")
+        if (length(lst) == 0L) stop("No matching configs")
+        if (length(lst) > 1L) stop("Too many matching configs")
         config <- lst[[1]]
         malformed_config <- any(
           is.null(names(config)),
           length(config) == 0
         )
-        if(malformed_config) stop("Selected config is malformed.")
+        if (malformed_config) stop("Selected config is malformed.")
         return(config)
       })
 

@@ -1,9 +1,13 @@
 server <- function(input, output) {
 
   library(magrittr)
-
+  verbose <- FALSE
   config <- jsonlite::read_json("../../../tests/testthat/JSON/test.json")$plots
-  data <- readRDS("../../../tests/testthat/RDS/data.rds")
+  data_object <- readRDS("../../../tests/testthat/RDS/data.rds")
+  if (verbose) {
+    print(config)
+    print(data_object)
+  }
   module_ids <- config %>%
     length() %>%
     seq(1, .) %>%
@@ -16,7 +20,11 @@ server <- function(input, output) {
   purrr::walk2(
     module_ids,
     config,
-    ~display_module_server(.x, shiny::reactive(.y), shiny::reactive(data))
+    ~display_module_server(
+      .x,
+      shiny::reactive(.y),
+      shiny::reactive(data_object)
+    )
   )
 
 }
