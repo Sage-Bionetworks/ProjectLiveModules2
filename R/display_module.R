@@ -3,7 +3,7 @@
 #' @param id A shiny id
 #'
 #' @export
-display_module_ui <- function(id){
+display_module_ui <- function(id) {
   ns <- shiny::NS(id)
 
   shiny::fluidRow(
@@ -38,14 +38,13 @@ display_module_ui <- function(id){
 
 #'
 #' @export
-display_module_server <- function(id, config, data){
+display_module_server <- function(id, config, data) {
   shiny::moduleServer(
     id,
     function(input, output, session) {
-      ns <- session$ns
 
       validated_config <- shiny::reactive({
-        if(!shiny::is.reactive(config)) stop("config is not reactive")
+        if (!shiny::is.reactive(config)) stop("config is not reactive")
         config <- config()
 
         malformed_config <- any(
@@ -54,23 +53,23 @@ display_module_server <- function(id, config, data){
           is.null(config[["entity"]]),
           is.null(config[["barchart"]]) && is.null(config[["datatable"]])
         )
-        if(malformed_config) stop("config is malformed")
+        if (malformed_config) stop("config is malformed")
         return(config)
       })
 
       validated_data <- shiny::reactive({
-        if(!shiny::is.reactive(data)) stop("data is not reactive")
+        if (!shiny::is.reactive(data)) stop("data is not reactive")
         data <- data()
         malformed_data <- any(
           length(data) == 0,
           is.null(names(data))
         )
-        if(malformed_data) stop("config is not malformed")
+        if (malformed_data) stop("config is not malformed")
         return(data)
       })
 
       selected_data <- shiny::reactive({
-        shiny::req(validated_data(),validated_config())
+        shiny::req(validated_data(), validated_config())
         purrr::pluck(validated_data(), validated_config()$entity)
       })
 

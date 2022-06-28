@@ -1,7 +1,7 @@
 #' Attribute Selection Module UI
 #'
 #' @param id A shiny id
-attribute_selection_module_ui <- function(id){
+attribute_sel_module_ui <- function(id) {
   ns <- shiny::NS(id)
   shiny::uiOutput(ns("attribute_ui"))
 }
@@ -18,14 +18,14 @@ attribute_selection_module_ui <- function(id){
 #' @param attribute_choices A shiny::reactive that returns a named character()
 #' @param attribute_input_default A shiny::reactive that returns a string or NA
 #' @param ui_label  A shiny::reactive that returns a string
-attribute_selection_module_server <- function(
+attribute_sel_module_server <- function(
     id,
     config,
     attribute_name,
     attribute_choices,
     attribute_input_default = shiny::reactive(NA),
     ui_label = shiny::reactive("Select attribute")
-  ){
+  ) {
   shiny::moduleServer(
     id,
     function(input, output, session) {

@@ -3,7 +3,7 @@
 #' @param id A shiny id
 #'
 #' @export
-datatable_module_ui <- function(id){
+datatable_module_ui <- function(id) {
   ns <- shiny::NS(id)
   DT::dataTableOutput(ns("datatable"))
 }
@@ -17,19 +17,18 @@ datatable_module_ui <- function(id){
 #'
 #' @export
 datatable_module_server <- function(
-    id, config, data, do_plot = shiny::reactive(T)
-){
+    id, config, data, do_plot = shiny::reactive(TRUE)
+) {
   shiny::moduleServer(
     id,
     function(input, output, session) {
-      ns <- session$ns
 
       output$datatable <- DT::renderDataTable({
         shiny::req(data(), do_plot())
         data()
       })
 
-      return(T)
+      return(TRUE)
     }
   )
 }

@@ -3,7 +3,7 @@
 #' @param id A shiny id
 #'
 #' @export
-admin_module_ui <- function(id){
+admin_module_ui <- function(id) {
   ns <- shiny::NS(id)
 
   shiny::tagList(
@@ -15,8 +15,8 @@ admin_module_ui <- function(id){
         title = "Controls",
         json_module_ui(ns("json")),
         shiny::uiOutput(ns("name_selection_ui")),
-        attribute_selection_module_ui(ns("entity_choice")),
-        attribute_selection_module_ui(ns("display_choice"))
+        attribute_sel_module_ui(ns("entity_choice")),
+        attribute_sel_module_ui(ns("display_choice"))
       )
     ),
     shiny::conditionalPanel(
@@ -42,7 +42,7 @@ admin_module_ui <- function(id){
 #' @param data a shiny::reactive that returns a named list of data frames
 #'
 #' @export
-admin_module_server <- function(id, data){
+admin_module_server <- function(id, data) {
   shiny::moduleServer(
     id,
     function(input, output, session) {
@@ -71,7 +71,7 @@ admin_module_server <- function(id, data){
       })
 
       # entity (component) selection ----
-      entity_choice <- attribute_selection_module_server(
+      entity_choice <- attribute_sel_module_server(
         "entity_choice",
         config            = selected_input_config,
         ui_label          = shiny::reactive("Select Items to plot."),
@@ -82,7 +82,7 @@ admin_module_server <- function(id, data){
       )
 
       # display (plot type) selection ----
-      display_choice <- attribute_selection_module_server(
+      display_choice <- attribute_sel_module_server(
         "display_choice",
         config            = selected_input_config,
         ui_label          = shiny::reactive("Select How to display items."),
@@ -157,10 +157,12 @@ admin_module_server <- function(id, data){
 
       output$download_json <- shiny::downloadHandler(
         filename = function() "test.json",
-        content = function(con) writeLines(
-          jsonlite::toJSON(output_config()),
-          con
-        )
+        content = function(con) {
+          writeLines(
+            jsonlite::toJSON(output_config()),
+            con
+          )
+        }
       )
 
 

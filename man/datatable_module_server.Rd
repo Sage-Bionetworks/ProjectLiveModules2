@@ -4,7 +4,7 @@
 \alias{datatable_module_server}
 \title{Data Table Module UI}
 \usage{
-datatable_module_server(id, config, data, do_plot = shiny::reactive(T))
+datatable_module_server(id, config, data, do_plot = shiny::reactive(TRUE))
 }
 \arguments{
 \item{id}{A shiny id}

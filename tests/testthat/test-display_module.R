@@ -65,4 +65,3 @@ test_that("display_module_server3", {
     }
   )
 })
-

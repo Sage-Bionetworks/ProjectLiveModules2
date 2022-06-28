@@ -1,14 +1,14 @@
-test_that("attribute_selection_module_ui", {
-  expect_type(attribute_selection_module_ui("id"), "list")
+test_that("attribute_sel_module_ui", {
+  expect_type(attribute_sel_module_ui("id"), "list")
 })
 
 attribute_choices_input <- c(
   "A1" = "A1", "A2" = "A2", "A3" = "A3", "None" = "none"
 )
 
-test_that("attribute_selection_module_server_no_config", {
+test_that("attribute_sel_module_server_no_config", {
   shiny::testServer(
-    attribute_selection_module_server,
+    attribute_sel_module_server,
     args = list(
       "config" = shiny::reactive(NULL),
       "attribute_name" = shiny::reactive("x_attribute"),
@@ -26,9 +26,9 @@ test_that("attribute_selection_module_server_no_config", {
   )
 })
 
-test_that("attribute_selection_module_server_with_config1", {
+test_that("attribute_sel_module_server_with_config1", {
   shiny::testServer(
-    attribute_selection_module_server,
+    attribute_sel_module_server,
     args = list(
       "config" = shiny::reactive(list("x_attribute" = "A2")),
       "attribute_name" = shiny::reactive("x_attribute"),
@@ -42,9 +42,9 @@ test_that("attribute_selection_module_server_with_config1", {
   )
 })
 
-test_that("attribute_selection_module_server_with_config2", {
+test_that("attribute_sel_module_server_with_config2", {
   shiny::testServer(
-    attribute_selection_module_server,
+    attribute_sel_module_server,
     args = list(
       "config" = shiny::reactive(list("x_attribute" = "A2")),
       "attribute_name" = shiny::reactive("x_attribute"),
@@ -58,9 +58,9 @@ test_that("attribute_selection_module_server_with_config2", {
   )
 })
 
-test_that("attribute_selection_module_server_with_config_none_selection", {
+test_that("attribute_sel_module_server_with_config_none_selection", {
   shiny::testServer(
-    attribute_selection_module_server,
+    attribute_sel_module_server,
     args = list(
       "config" = shiny::reactive(list("x_attribute" = "A2")),
       "attribute_name" = shiny::reactive("color_attribute"),

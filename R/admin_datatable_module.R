@@ -3,8 +3,7 @@
 #' @param id A shiny id
 #'
 #' @export
-admin_datatable_module_ui <- function(id){
-  ns <- shiny::NS(id)
+admin_datatable_module_ui <- function(id) {
 
   shiny::fluidRow(
     shinydashboard::box(
@@ -23,11 +22,10 @@ admin_datatable_module_ui <- function(id){
 #' @param input_config A shiny::reactive that returns a named list or Null.
 #'
 #' @export
-admin_datatable_module_server <- function(id, input_config){
+admin_datatable_module_server <- function(id, input_config) {
   shiny::moduleServer(
     id,
     function(input, output, session) {
-      ns <- session$ns
 
       output_config <- shiny::reactive(list())
 

@@ -23,7 +23,7 @@ test_that("json_module_with_json1", {
     args = list(),
     {
       session$setInputs("config_method_choice" = "upload")
-      session$setInputs("json_upload"= list(datapath = "JSON/test.json"))
+      session$setInputs("json_upload" = list(datapath = "JSON/test.json"))
       session$setInputs("config_choice" = "Plot 1")
       expect_type(config_list(), "list")
       expect_length(config_list(), 3)
@@ -43,7 +43,7 @@ test_that("json_module_with_json2", {
     args = list(),
     {
       session$setInputs("config_method_choice" = "upload")
-      session$setInputs("json_upload"= list(datapath = "JSON/test.json"))
+      session$setInputs("json_upload" = list(datapath = "JSON/test.json"))
       session$setInputs("config_choice" = "Data Table 1")
       expect_type(config_list(), "list")
       expect_length(config_list(), 3)

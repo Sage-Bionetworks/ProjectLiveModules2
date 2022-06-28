@@ -5,7 +5,7 @@
 #' @param color_attribute A string
 create_barchart_config <- function(
     x_attribute, group_attribute, color_attribute
-){
+) {
   config <- list("x_attribute" = x_attribute)
 
   if (group_attribute != "none") {
@@ -18,6 +18,29 @@ create_barchart_config <- function(
   return(config)
 }
 
+
+#' Create Barchart
+#'
+#' Creates a barchart based on the attributes in the config
+#'
+#' @param data A data frame
+#' @param config A named list. All values must be columns in data:
+#'  - "x_attribute" (required)
+create_barchart <- function(data, config) {
+  plot_is_grouped <- !is.null(config$group_attribute)
+  plot_is_stacked <- !is.null(config$color_attribute)
+
+  if (plot_is_grouped && plot_is_stacked) {
+    return(create_stacked_grp_barchart(data, config))
+  } else if (plot_is_grouped) {
+    return(create_grouped_barchart(data, config))
+  } else if (plot_is_stacked) {
+    return(create_stacked_barchart(data, config))
+  } else {
+    return(create_standard_barchart(data, config))
+  }
+}
+
 #' Create Standard Barchart
 #'
 #' @param data A data frame
@@ -25,7 +48,7 @@ create_barchart_config <- function(
 #'  - "x_attribute" (required)
 #'
 #' @importFrom rlang .data
-create_standard_barchart <- function(data, config){
+create_standard_barchart <- function(data, config) {
   data %>%
     dplyr::select("x" = config$x_attribute) %>%
     tidyr::drop_na() %>%
@@ -41,7 +64,7 @@ create_standard_barchart <- function(data, config){
 #'  - "color_attribute" (required)
 #'
 #' @importFrom rlang .data
-create_stacked_barchart <- function(data, config){
+create_stacked_barchart <- function(data, config) {
   data %>%
     dplyr::select(
       "x" = config$x_attribute,
@@ -60,7 +83,7 @@ create_stacked_barchart <- function(data, config){
 #'  - "group_attribute" (required)
 #'
 #' @importFrom rlang .data
-create_grouped_barchart <- function(data, config){
+create_grouped_barchart <- function(data, config) {
   data %>%
     dplyr::select(
       "x" = config$x_attribute,
@@ -90,7 +113,7 @@ create_grouped_barchart <- function(data, config){
 #'  - "group_attribute" (required)
 #'
 #' @importFrom rlang .data
-create_stacked_grouped_barchart <- function(data, config){
+create_stacked_grp_barchart <- function(data, config) {
   data %>%
     dplyr::select(
       "x" = config$x_attribute,
@@ -165,7 +188,7 @@ create_plotly_barchart <- function(
     y = ~y,
     color = ~color,
     text = ~text,
-    textposition = 'none',
+    textposition = "none",
     key = ~key,
     type = "bar",
     colors = bar_colors,
@@ -175,7 +198,7 @@ create_plotly_barchart <- function(
       title = title,
       xaxis = list(title = xlab),
       yaxis = list(title = ylab),
-      barmode = 'stack',
+      barmode = "stack",
       showlegend = showlegend
     )
   return(p)

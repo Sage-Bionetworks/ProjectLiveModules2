@@ -61,8 +61,8 @@ test_that("create_grouped_barchart", {
   print(fig)
 })
 
-test_that("create_stacked_grouped_barchart", {
-  fig <- create_stacked_grouped_barchart(
+test_that("create_stacked_grp_barchart", {
+  fig <- create_stacked_grp_barchart(
     data,
     list(
       "x_attribute" = "assay",
