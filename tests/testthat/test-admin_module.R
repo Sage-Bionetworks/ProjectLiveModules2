@@ -6,24 +6,18 @@ data <-
   testthat::test_path("RDS", "data.rds") %>%
   readRDS()
 
-expected_barchart_config <-  list(
+
+
+expected_barchart_config1 <-  list(
   "x_attribute" = "assay",
   "group_attribute" = "year",
   "color_attribute" = "file_format"
 )
 
-expected_output_config1 <-  list(
+expected_barchart_config2 <-  list(
   "entity" = "Files",
   "name" = "Barchart 1",
-  "barchart" = expected_barchart_config
-)
-
-expected_datatable_config <- list()
-
-expected_output_config2 <- list(
-  "entity" = "Files",
-  "name" = "Data Table 1",
-  "datatable" = expected_datatable_config
+  "barchart" = expected_barchart_config1
 )
 
 test_that("admin_module_server_barchart_no_json_input", {
@@ -53,9 +47,9 @@ test_that("admin_module_server_barchart_no_json_input", {
 
       # rest
       expect_true(tibble::is_tibble(selected_data()))
-      expect_equal(barchart_config(), expected_barchart_config)
-      expect_equal(plot_config(), expected_barchart_config)
-      expect_equal(output_config(), expected_output_config1)
+      expect_equal(barchart_config(), expected_barchart_config1)
+      expect_equal(plot_config(), expected_barchart_config1)
+      expect_equal(output_config(), expected_barchart_config2)
     }
   )
 })
@@ -88,12 +82,61 @@ test_that("admin_module_server_barchart_with_json_input", {
 
       # rest
       expect_true(tibble::is_tibble(selected_data()))
-      expect_equal(barchart_config(), expected_barchart_config)
-      expect_equal(plot_config(), expected_barchart_config)
-      expect_equal(output_config(), expected_output_config1)
+      expect_equal(barchart_config(), expected_barchart_config1)
+      expect_equal(plot_config(), expected_barchart_config1)
+      expect_equal(output_config(), expected_barchart_config2)
     }
   )
 })
+
+expected_piechart_config1 <-  list(
+  "label_attribute" = "assay"
+)
+
+expected_piechart_config2 <-  list(
+  "entity" = "Files",
+  "name" = "Piechart 1",
+  "piechart" = expected_piechart_config1
+)
+
+test_that("admin_module_server_piechart_with_json_input", {
+  shiny::testServer(
+    admin_module_server,
+    args = list(
+      "data" = shiny::reactive(data)
+    ),
+    {
+      session$setInputs("json-config_method_choice" = "upload")
+      session$setInputs("json-json_upload" = list(datapath = "JSON/test.json"))
+      session$setInputs("json-config_choice" = "Piechart 1")
+      session$setInputs("display_choice-attribute_choice" = "piechart")
+      session$setInputs("entity_choice-attribute_choice" = "Files")
+      session$setInputs("name_choice" = "Piechart 1")
+      session$setInputs("piechart-label_attribute-attribute_choice" = "assay")
+
+      # other input
+      expect_equal(name_selection_default(), "Piechart 1")
+      expect_type(output$name_selection_ui, "list")
+
+      expect_equal(display_choice(), "piechart")
+      expect_equal(entity_choice(), "Files")
+
+      # rest
+      expect_true(tibble::is_tibble(selected_data()))
+      expect_equal(piechart_config(), expected_piechart_config1)
+      expect_equal(plot_config(), expected_piechart_config1)
+      expect_equal(output_config(), expected_piechart_config2)
+    }
+  )
+})
+
+expected_datatable_config1 <- list()
+
+expected_datatable_config2 <- list(
+  "entity" = "Files",
+  "name" = "Data Table 1",
+  "datatable" = expected_datatable_config1
+)
 
 test_that("admin_module_server_datatable_with_json_input", {
   shiny::testServer(
@@ -115,9 +158,9 @@ test_that("admin_module_server_datatable_with_json_input", {
 
       # rest
       expect_true(tibble::is_tibble(selected_data()))
-      expect_equal(datatable_config(), expected_datatable_config)
-      expect_equal(plot_config(), expected_datatable_config)
-      expect_equal(output_config(), expected_output_config2)
+      expect_equal(datatable_config(), expected_datatable_config1)
+      expect_equal(plot_config(), expected_datatable_config1)
+      expect_equal(output_config(), expected_datatable_config2)
     }
   )
 })

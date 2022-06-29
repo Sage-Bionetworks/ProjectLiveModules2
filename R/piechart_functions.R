@@ -1,3 +1,12 @@
+#' Create Piechart Config
+#'
+#' @param label_attribute A stirng
+create_piechart_config <- function(label_attribute) {
+  config <- list("label_attribute" = label_attribute)
+  return(config)
+}
+
+
 #' Create Piechart
 #'
 #' @param data A data frame
