@@ -18,6 +18,11 @@ display_module_ui <- function(id) {
         ns = ns
       ),
       shiny::conditionalPanel(
+        condition = "output.plot_type == 'piechart'",
+        barchart_module_ui(ns("piechart")),
+        ns = ns
+      ),
+      shiny::conditionalPanel(
         condition = "output.plot_type == 'datatable'",
         datatable_module_ui(ns("datatable")),
         ns = ns
@@ -51,7 +56,11 @@ display_module_server <- function(id, config, data) {
           length(config) == 0,
           is.null(config[["name"]]),
           is.null(config[["entity"]]),
-          is.null(config[["barchart"]]) && is.null(config[["datatable"]])
+          all(
+            is.null(config[["barchart"]]),
+            is.null(config[["piechart"]]),
+            is.null(config[["datatable"]])
+          )
         )
         if (malformed_config) stop("config is malformed")
         return(config)
@@ -104,6 +113,14 @@ display_module_server <- function(id, config, data) {
         plot_config,
         selected_data,
         shiny::reactive(plot_type() == "barchart")
+      )
+      plotly_module_server(
+        "piechart",
+        config = plot_config,
+        data = selected_data,
+        plot_function = shiny::reactive(create_piechart),
+        required_config_attrbutes = shiny::reactive("label_attribute"),
+        do_plot = shiny::reactive(plot_type() == "piechart")
       )
       datatable_module_server(
         "datatable",

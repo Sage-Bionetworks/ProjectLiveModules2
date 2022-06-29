@@ -1,3 +1,16 @@
+#' Get Plot Type
+#'
+#' Determines the plot type from the config
+#'
+#' @param config A named list with attribute name of "plot_type"
+get_plot_type <- function(config) {
+  if ("barchart" %in% names(config)) plot_type <- "barchart"
+  else if ("piechart" %in% names(config)) plot_type <- "piechart"
+  else if ("datatable" %in% names(config)) plot_type <- "datatable"
+  else stop("Could not determine plot type.")
+  return(plot_type)
+}
+
 #' Get Value From List
 #'
 #' Gets the value from the list, or returns the default value if unable
@@ -25,12 +38,17 @@ get_value_from_list <- function(lst, value, default = NA) {
 #'
 #' @param table A dataframe with column "color"
 #' @param pallete A name of a viridis() pallete
-get_viridis_colors_from_tbl <- function(table, pallete = "viridis") {
+get_viridis_colors_from_tbl <- function(
+    table,
+    pallete = "viridis",
+    column = "color"
+) {
   table %>%
-    dplyr::select("color") %>%
+    dplyr::select(dplyr::all_of(column)) %>%
     dplyr::n_distinct() %>%
     viridis::viridis_pal(option = pallete)()
 }
+
 
 #' Get Viridis Palette Options
 #'

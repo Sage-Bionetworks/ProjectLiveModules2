@@ -27,7 +27,7 @@ test_that("display_module_server1", {
       expect_type(validated_data(), "list")
 
       expect_true(tibble::is_tibble(selected_data()))
-      expect_equal(box_title(), "Plot 1")
+      expect_equal(box_title(), "Barchart 1")
       expect_equal(plot_type(), "barchart")
       expect_equal(plot_config(), list("x_attribute" = "initiative"))
     }
@@ -43,9 +43,9 @@ test_that("display_module_server2", {
     ),
     {
       expect_true(tibble::is_tibble(selected_data()))
-      expect_equal(box_title(), "Plot 2")
-      expect_equal(plot_type(), "barchart")
-      expect_equal(plot_config(), list("x_attribute" = "initiative"))
+      expect_equal(box_title(), "Piechart 1")
+      expect_equal(plot_type(), "piechart")
+      expect_equal(plot_config(), list("label_attribute" = "initiative"))
     }
   )
 })

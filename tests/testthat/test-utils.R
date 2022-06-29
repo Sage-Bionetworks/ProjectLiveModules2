@@ -22,6 +22,7 @@ test_that("get_viridis_colors_from_tbl", {
     get_viridis_colors_from_tbl(dplyr::tibble("color" = c("a", "a", "b"))),
     c("#440154FF", "#FDE725FF")
   )
+
   expect_equal(
     get_viridis_colors_from_tbl(
       dplyr::tibble("color" = c("a", "a", "b")),
@@ -29,10 +30,20 @@ test_that("get_viridis_colors_from_tbl", {
     ),
     c("#000004FF", "#FCFDBFFF")
   )
+
   expect_equal(
     get_viridis_colors_from_tbl(
       dplyr::tibble("color" = c("a", "a", "b")),
       "A"
+    ),
+    c("#000004FF", "#FCFDBFFF")
+  )
+
+  expect_equal(
+    get_viridis_colors_from_tbl(
+      dplyr::tibble("label" = c("a", "a", "b")),
+      "magma",
+      "label"
     ),
     c("#000004FF", "#FCFDBFFF")
   )

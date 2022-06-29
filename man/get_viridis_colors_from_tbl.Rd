@@ -4,7 +4,7 @@
 \alias{get_viridis_colors_from_tbl}
 \title{Get Viridis Colors From Tbl}
 \usage{
-get_viridis_colors_from_tbl(table, pallete = "viridis")
+get_viridis_colors_from_tbl(table, pallete = "viridis", column = "color")
 }
 \arguments{
 \item{table}{A dataframe with column "color"}

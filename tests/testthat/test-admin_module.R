@@ -14,7 +14,7 @@ expected_barchart_config <-  list(
 
 expected_output_config1 <-  list(
   "entity" = "Files",
-  "name" = "Plot 1",
+  "name" = "Barchart 1",
   "barchart" = expected_barchart_config
 )
 
@@ -34,10 +34,10 @@ test_that("admin_module_server_barchart_no_json_input", {
     ),
     {
       session$setInputs("json-config_method_choice" = "none")
-      session$setInputs("json-config_choice" = "Plot 1")
+      session$setInputs("json-config_choice" = "Barchart 1")
       session$setInputs("display_choice-attribute_choice" = "barchart")
       session$setInputs("entity_choice-attribute_choice" = "Files")
-      session$setInputs("name_choice" = "Plot 1")
+      session$setInputs("name_choice" = "Barchart 1")
       session$setInputs("barchart-x_attribute-attribute_choice" = "assay")
       session$setInputs(
         "barchart-color_attribute-attribute_choice" = "file_format"
@@ -69,10 +69,10 @@ test_that("admin_module_server_barchart_with_json_input", {
     {
       session$setInputs("json-config_method_choice" = "upload")
       session$setInputs("json-json_upload" = list(datapath = "JSON/test.json"))
-      session$setInputs("json-config_choice" = "Plot 1")
+      session$setInputs("json-config_choice" = "Barchart 1")
       session$setInputs("display_choice-attribute_choice" = "barchart")
       session$setInputs("entity_choice-attribute_choice" = "Files")
-      session$setInputs("name_choice" = "Plot 1")
+      session$setInputs("name_choice" = "Barchart 1")
       session$setInputs("barchart-x_attribute-attribute_choice" = "assay")
       session$setInputs(
         "barchart-color_attribute-attribute_choice" = "file_format"
@@ -80,7 +80,7 @@ test_that("admin_module_server_barchart_with_json_input", {
       session$setInputs("barchart-group_attribute-attribute_choice" = "year")
 
       # other input
-      expect_equal(name_selection_default(), "Plot 1")
+      expect_equal(name_selection_default(), "Barchart 1")
       expect_type(output$name_selection_ui, "list")
 
       expect_equal(display_choice(), "barchart")
