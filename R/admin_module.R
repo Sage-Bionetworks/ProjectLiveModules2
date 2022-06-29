@@ -25,7 +25,7 @@ admin_module_ui <- function(id) {
     ),
     shiny::conditionalPanel(
       condition = "output.display_choice == 'piechart'",
-      admin_barchart_module_ui(ns("barchart")),
+      admin_barchart_module_ui(ns("piechart")),
       ns = ns
     ),
     shiny::conditionalPanel(
