@@ -3,31 +3,6 @@ data <-
   readRDS() %>%
   purrr::pluck("Files")
 
-# test_that("create_piechart_config", {
-#   expect_equal(
-#     create_piechart_config("assay", "none", "none"),
-#     list("x_attribute" = "assay")
-#   )
-#
-#   expect_equal(
-#     create_piechart_config("assay", "file", "none"),
-#     list(
-#       "x_attribute" = "assay",
-#       "group_attribute" = "file"
-#     )
-#   )
-#
-#   expect_equal(
-#     create_piechart_config("assay",  "none", "file"),
-#     list(
-#       "x_attribute" = "assay",
-#       "color_attribute" = "file"
-#     )
-#   )
-#
-# })
-
-
 test_that("create_piechart", {
   fig <- create_piechart(
     data,

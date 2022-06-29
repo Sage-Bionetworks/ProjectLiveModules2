@@ -38,6 +38,7 @@ get_value_from_list <- function(lst, value, default = NA) {
 #'
 #' @param table A dataframe with column "color"
 #' @param pallete A name of a viridis() pallete
+#' @param column A name fo a column
 get_viridis_colors_from_tbl <- function(
     table,
     pallete = "viridis",

@@ -15,11 +15,12 @@ plotly_module_ui <- function(id) {
 #'
 #' @param id A shiny id
 #' @param data A shiny::reactive that returns A data frame.
-#' @param config A shiny::reactive that returns a named list:
-#'  - "x_attribute": Column in data param (required)
-#'  - "color_attribute": Column in data param
-#'  - "group_attribute": Column in data param
+#' @param config A shiny::reactive that returns a named list
+#' @param plot_function A function that plots the table
+#' @param required_config_attrbutes Attributes thatare required in the config
+#' @param optional_config_attributes Attributes that are allowed in the config
 #' @param do_plot A shiny::reactive that returns a logical.
+#'
 #' @export
 plotly_module_server <- function(
     id,

@@ -26,15 +26,8 @@ create_piechart <- function(data, config, palette = "viridis") {
 #' Create Plotly Piechart
 #'
 #' @param plot_data A dataframe
-#' @param x_col A string
-#' @param y_col A string
-#' @param color_col A string or NA
-#' @param key_col A string or NA
-#' @param text_col A string or NA
-#' @param xlab A string
-#' @param ylab A string
-#' @param title A string
-#' @param showlegend True or False
+#' @param labels_col A name of the column
+#' @param values_col A name of a column
 #' @param palette A name of a viridis() palette
 #'
 #' @importFrom magrittr %>%

@@ -17,12 +17,15 @@ plotly_module_server(
 \arguments{
 \item{id}{A shiny id}
 
-\item{config}{A shiny::reactive that returns a named list:
-- "x_attribute": Column in data param (required)
-- "color_attribute": Column in data param
-- "group_attribute": Column in data param}
+\item{config}{A shiny::reactive that returns a named list}
 
 \item{data}{A shiny::reactive that returns A data frame.}
+
+\item{plot_function}{A function that plots the table}
+
+\item{required_config_attrbutes}{Attributes thatare required in the config}
+
+\item{optional_config_attributes}{Attributes that are allowed in the config}
 
 \item{do_plot}{A shiny::reactive that returns a logical.}
 }

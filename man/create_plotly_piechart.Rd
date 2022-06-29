@@ -14,25 +14,11 @@ create_plotly_piechart(
 \arguments{
 \item{plot_data}{A dataframe}
 
+\item{labels_col}{A name of the column}
+
+\item{values_col}{A name of a column}
+
 \item{palette}{A name of a viridis() palette}
-
-\item{x_col}{A string}
-
-\item{y_col}{A string}
-
-\item{color_col}{A string or NA}
-
-\item{key_col}{A string or NA}
-
-\item{text_col}{A string or NA}
-
-\item{xlab}{A string}
-
-\item{ylab}{A string}
-
-\item{title}{A string}
-
-\item{showlegend}{True or False}
 }
 \description{
 Create Plotly Piechart

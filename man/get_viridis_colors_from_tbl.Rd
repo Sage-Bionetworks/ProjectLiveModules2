@@ -10,6 +10,8 @@ get_viridis_colors_from_tbl(table, pallete = "viridis", column = "color")
 \item{table}{A dataframe with column "color"}
 
 \item{pallete}{A name of a viridis() pallete}
+
+\item{column}{A name fo a column}
 }
 \description{
 Get Viridis Colors From Tbl

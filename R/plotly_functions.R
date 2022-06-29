@@ -37,7 +37,7 @@ validate_required_attributes <- function(
 ) {
   missing_attributes <- !all(required_attrbutes %in% names(config))
   if (missing_attributes) {
-    stop(create_missing_attribute_string(
+    stop(create_missing_attr_msg(
       names(config),
       required_attrbutes,
       error_prefix
@@ -45,12 +45,12 @@ validate_required_attributes <- function(
   }
 }
 
-#' Create Missing Attribute String
+#' Create Missing Attribute Message
 #'
-#' @param config The config being tested, a named list
+#' @param config_names A list of names in the config
 #' @param required_attrbutes The attributes the config must have
 #' @param error_prefix The prefix for the error message
-create_missing_attribute_string <- function(
+create_missing_attr_msg <- function(
     config_names,
     required_attrbutes,
     error_prefix = "Config malformed: "
@@ -81,23 +81,20 @@ validate_allowed_attributes <- function(
   extra_attributes <- !all(names(config) %in% allowed_attributes)
 
   if (extra_attributes) {
-    stop(
-      error_prefix,
-      "extraneous attributes; ",
-      "config has: ",
-      stringr::str_c(names(config), collapse = ", "),
-      "; allowed: ",
-      stringr::str_c(allowed_attributes, collapse = ", ")
-    )
+    stop(create_extraneous_attr_msg(
+      names(config),
+      allowed_attributes,
+      error_prefix
+    ))
   }
 }
 
-#' Create Extraneous Attribute String
+#' Create Extraneous Attribute Message
 #'
 #' @param config_names A list of names from the config
 #' @param allowed_attributes A list of attributes allowed for the config
 #' @param error_prefix The prefix for the error message
-create_extraneous_attribute_string <- function(
+create_extraneous_attr_msg <- function(
     config_names,
     allowed_attributes,
     error_prefix = "Config malformed: "

@@ -25,7 +25,7 @@ admin_module_ui <- function(id) {
     ),
     shiny::conditionalPanel(
       condition = "output.display_choice == 'piechart'",
-      admin_barchart_module_ui(ns("piechart")),
+      admin_piechart_module_ui(ns("piechart")),
       ns = ns
     ),
     shiny::conditionalPanel(
@@ -92,7 +92,11 @@ admin_module_server <- function(id, data) {
         ui_label          = shiny::reactive("Select How to display items."),
         attribute_name    = shiny::reactive("type"),
         attribute_choices = shiny::reactive(
-          c("Barchart" = "barchart", "Data Table" = "datatable")
+          c(
+            "Barchart" = "barchart",
+            "Piechart" = "piechart",
+            "Data Table" = "datatable"
+          )
         )
       )
 
