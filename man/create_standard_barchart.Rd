@@ -4,13 +4,15 @@
 \alias{create_standard_barchart}
 \title{Create Standard Barchart}
 \usage{
-create_standard_barchart(data, config)
+create_standard_barchart(data, config, palette = "viridis")
 }
 \arguments{
 \item{data}{A data frame}
 
 \item{config}{A named list. All values must be columns in data:
 - "x_attribute" (required)}
+
+\item{palette}{A name of a viridis() palette}
 }
 \description{
 Create Standard Barchart

@@ -1,17 +1,17 @@
 {
   "plots": [
     {
-      "name":"Plot 1",
+      "name":"Barchart 1",
       "entity":"Files",
       "barchart":{
         "x_attribute":"initiative"
       }
     },
     {
-      "name":"Plot 2",
+      "name":"Piechart 1",
       "entity":"Studies",
-      "barchart": {
-        "x_attribute":"initiative"
+      "piechart": {
+        "label_attribute":"initiative"
       }
     },
     {

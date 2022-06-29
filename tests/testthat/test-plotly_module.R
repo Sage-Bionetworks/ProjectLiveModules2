@@ -1,5 +1,5 @@
-test_that("barchart_module_ui", {
-  expect_type(barchart_module_ui("id"), "list")
+test_that("plotly_module_ui", {
+  expect_type(plotly_module_ui("id"), "list")
 })
 
 data <-
@@ -7,17 +7,16 @@ data <-
   readRDS() %>%
   purrr::pluck("Files")
 
-config <- list(
-  "x_attribute" = "assay",
-  "pallete" = "viridis"
-)
+config <- list("label_attribute" = "assay")
 
-test_that("barchart_module_server", {
+test_that("plotly_module_server", {
   shiny::testServer(
-    barchart_module_server,
+    plotly_module_server,
     args = list(
       "data" = shiny::reactive(data),
-      "config" = shiny::reactive(config)
+      "config" = shiny::reactive(config),
+      "plot_function" = shiny::reactive(create_piechart),
+      "required_config_attrbutes" = shiny::reactive("label_attribute")
     ),
     {
       session$setInputs("palette_choice" = "magma")

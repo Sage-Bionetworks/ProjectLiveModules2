@@ -4,13 +4,15 @@
 \alias{create_barchart}
 \title{Create Barchart}
 \usage{
-create_barchart(data, config)
+create_barchart(data, config, palette = "viridis")
 }
 \arguments{
 \item{data}{A data frame}
 
 \item{config}{A named list. All values must be columns in data:
-- "x_attribute" (required)}
+- "x_attribute"}
+
+\item{palette}{A name of a viridis() palette}
 }
 \description{
 Creates a barchart based on the attributes in the config

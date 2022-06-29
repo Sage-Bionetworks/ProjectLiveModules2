@@ -4,15 +4,17 @@
 \alias{create_stacked_grp_barchart}
 \title{Create Stacked Grouped Barchart}
 \usage{
-create_stacked_grp_barchart(data, config)
+create_stacked_grp_barchart(data, config, palette = "viridis")
 }
 \arguments{
 \item{data}{A dataframe}
 
 \item{config}{A named list. All values must be columns in data:
-- "x_attribute" (required)
-- "color_attribute" (required)
-- "group_attribute" (required)}
+- "x_attribute"
+- "color_attribute"
+- "group_attribute"}
+
+\item{palette}{A name of a viridis() palette}
 }
 \description{
 Create Stacked Grouped Barchart

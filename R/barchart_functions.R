@@ -25,20 +25,23 @@ create_barchart_config <- function(
 #'
 #' @param data A data frame
 #' @param config A named list. All values must be columns in data:
-#'  - "x_attribute" (required)
-create_barchart <- function(data, config) {
+#'  - "x_attribute"
+#' @param palette A name of a viridis() palette
+create_barchart <- function(data, config, palette = "viridis") {
   plot_is_grouped <- !is.null(config$group_attribute)
   plot_is_stacked <- !is.null(config$color_attribute)
 
   if (plot_is_grouped && plot_is_stacked) {
-    return(create_stacked_grp_barchart(data, config))
+    plot_func <- create_stacked_grp_barchart
   } else if (plot_is_grouped) {
-    return(create_grouped_barchart(data, config))
+    plot_func <- create_grouped_barchart
   } else if (plot_is_stacked) {
-    return(create_stacked_barchart(data, config))
+    plot_func <- create_stacked_barchart
   } else {
-    return(create_standard_barchart(data, config))
+    plot_func <- create_standard_barchart
   }
+
+  plot_func(data, config, palette)
 }
 
 #' Create Standard Barchart
@@ -46,25 +49,27 @@ create_barchart <- function(data, config) {
 #' @param data A data frame
 #' @param config A named list. All values must be columns in data:
 #'  - "x_attribute" (required)
+#' @param palette A name of a viridis() palette
 #'
 #' @importFrom rlang .data
-create_standard_barchart <- function(data, config) {
+create_standard_barchart <- function(data, config, palette = "viridis") {
   data %>%
     dplyr::select("x" = config$x_attribute) %>%
     tidyr::drop_na() %>%
     dplyr::count(.data$x, name = "y") %>%
-    create_plotly_barchart(text_col = "y")
+    create_plotly_barchart(text_col = "y", palette = palette)
 }
 
 #' Create Stacked Barchart
 #'
 #' @param data A dataframe
 #' @param config A named list. All values must be columns in data:
-#'  - "x_attribute" (required)
-#'  - "color_attribute" (required)
+#'  - "x_attribute"
+#'  - "color_attribute"
+#' @param palette A name of a viridis() palette
 #'
 #' @importFrom rlang .data
-create_stacked_barchart <- function(data, config) {
+create_stacked_barchart <- function(data, config, palette = "viridis") {
   data %>%
     dplyr::select(
       "x" = config$x_attribute,
@@ -72,18 +77,23 @@ create_stacked_barchart <- function(data, config) {
     ) %>%
     tidyr::drop_na() %>%
     dplyr::count(.data$x, .data$color, name = "y") %>%
-    create_plotly_barchart(color_col = "color", text_col = "y")
+    create_plotly_barchart(
+      color_col = "color",
+      text_col = "y",
+      palette = palette
+    )
 }
 
 #' Create Grouped Barchart
 #'
 #' @param data A dataframe
 #' @param config A named list. All values must be columns in data:
-#'  - "x_attribute" (required)
-#'  - "group_attribute" (required)
+#'  - "x_attribute"
+#'  - "group_attribute"
+#' @param palette A name of a viridis() palette
 #'
 #' @importFrom rlang .data
-create_grouped_barchart <- function(data, config) {
+create_grouped_barchart <- function(data, config, palette = "viridis") {
   data %>%
     dplyr::select(
       "x" = config$x_attribute,
@@ -97,7 +107,8 @@ create_grouped_barchart <- function(data, config) {
         plot_data = .,
         text_col = "y",
         xlab = .y$group,
-        showlegend = FALSE
+        showlegend = FALSE,
+        palette = palette
       )
     ) %>%
     plotly::subplot(nrows = 1, shareX = TRUE, shareY = TRUE) %>%
@@ -108,12 +119,13 @@ create_grouped_barchart <- function(data, config) {
 #'
 #' @param data A dataframe
 #' @param config A named list. All values must be columns in data:
-#'  - "x_attribute" (required)
-#'  - "color_attribute" (required)
-#'  - "group_attribute" (required)
+#'  - "x_attribute"
+#'  - "color_attribute"
+#'  - "group_attribute"
+#' @param palette A name of a viridis() palette
 #'
 #' @importFrom rlang .data
-create_stacked_grp_barchart <- function(data, config) {
+create_stacked_grp_barchart <- function(data, config, palette = "viridis") {
   data %>%
     dplyr::select(
       "x" = config$x_attribute,
@@ -129,7 +141,8 @@ create_stacked_grp_barchart <- function(data, config) {
         color_col = "color",
         text_col = "y",
         xlab = .y$group,
-        showlegend = FALSE
+        showlegend = FALSE,
+        palette = palette
       )
     ) %>%
     plotly::subplot(nrows = 1, shareX = TRUE, shareY = TRUE) %>%
@@ -147,8 +160,8 @@ create_stacked_grp_barchart <- function(data, config) {
 #' @param xlab A string
 #' @param ylab A string
 #' @param title A string
-#' @param bar_colors A string or NULL
 #' @param showlegend True or False
+#' @param palette A name of a viridis() palette
 #'
 #' @importFrom magrittr %>%
 create_plotly_barchart <- function(
@@ -161,8 +174,8 @@ create_plotly_barchart <- function(
     xlab = "",
     ylab = "",
     title = "",
-    bar_colors = NULL,
-    showlegend = TRUE
+    showlegend = TRUE,
+    palette = "viridis"
 ) {
 
   select_cols <- c(
@@ -174,13 +187,7 @@ create_plotly_barchart <- function(
   )
 
   plot_data <- dplyr::select(plot_data, dplyr::all_of(select_cols))
-
-  if (is.null(bar_colors)) {
-    bar_colors <- plot_data %>%
-      dplyr::select("color") %>%
-      dplyr::n_distinct() %>%
-      viridis::viridis_pal(option = "D")()
-  }
+  bar_colors <- get_viridis_colors_from_tbl(plot_data, palette)
 
   p <- plotly::plot_ly(
     plot_data,

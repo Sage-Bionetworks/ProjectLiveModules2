@@ -5,7 +5,6 @@
 #' @export
 admin_module_ui <- function(id) {
   ns <- shiny::NS(id)
-
   shiny::tagList(
     shiny::fluidRow(
       shinydashboard::box(
@@ -22,6 +21,11 @@ admin_module_ui <- function(id) {
     shiny::conditionalPanel(
       condition = "output.display_choice == 'barchart'",
       admin_barchart_module_ui(ns("barchart")),
+      ns = ns
+    ),
+    shiny::conditionalPanel(
+      condition = "output.display_choice == 'piechart'",
+      admin_piechart_module_ui(ns("piechart")),
       ns = ns
     ),
     shiny::conditionalPanel(
@@ -88,7 +92,11 @@ admin_module_server <- function(id, data) {
         ui_label          = shiny::reactive("Select How to display items."),
         attribute_name    = shiny::reactive("type"),
         attribute_choices = shiny::reactive(
-          c("Barchart" = "barchart", "Data Table" = "datatable")
+          c(
+            "Barchart" = "barchart",
+            "Piechart" = "piechart",
+            "Data Table" = "datatable"
+          )
         )
       )
 
@@ -113,6 +121,12 @@ admin_module_server <- function(id, data) {
         selected_input_config
       )
 
+      piechart_config <- admin_piechart_module_server(
+        "piechart",
+        selected_data,
+        selected_input_config
+      )
+
       datatable_config <- admin_datatable_module_server(
         "datatable",
         selected_input_config
@@ -121,6 +135,7 @@ admin_module_server <- function(id, data) {
       plot_config <- shiny::reactive({
         shiny::req(display_choice())
         if (display_choice() == "barchart") return(barchart_config())
+        else if (display_choice() == "piechart") return(piechart_config())
         else if (display_choice() == "datatable") return(datatable_config())
       })
 
@@ -139,6 +154,11 @@ admin_module_server <- function(id, data) {
           config <- c(
             config,
             list("barchart" = plot_config())
+          )
+        } else if (display_choice() == "piechart") {
+          config <- c(
+            config,
+            list("piechart" = plot_config())
           )
         } else if (display_choice() == "datatable") {
           config <- c(
