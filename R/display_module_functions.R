@@ -1,8 +1,6 @@
 #' Validate Plot Config
 #'
 #' @param config The config being tested, a named list
-#' @param required_attrbutes The attributes the config must have
-#' @param optional_attributes The attributes the config is allowed to have
 #' @param error_prefix The prefix for the error message
 validate_plot_config <- function(
     config,

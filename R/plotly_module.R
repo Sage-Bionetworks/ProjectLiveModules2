@@ -19,7 +19,6 @@ plotly_module_ui <- function(id) {
 #' @param plot_function A function that plots the table
 #' @param required_config_attrbutes Attributes thatare required in the config
 #' @param optional_config_attributes Attributes that are allowed in the config
-#' @param do_plot A shiny::reactive that returns a logical.
 #'
 #' @export
 plotly_module_server <- function(
@@ -28,8 +27,7 @@ plotly_module_server <- function(
     data,
     plot_function,
     required_config_attrbutes = shiny::reactive(c()),
-    optional_config_attributes = shiny::reactive(c()),
-    do_plot = shiny::reactive(TRUE)
+    optional_config_attributes = shiny::reactive(c())
 ) {
   shiny::moduleServer(
     id,
@@ -37,10 +35,7 @@ plotly_module_server <- function(
       ns <- session$ns
 
       validated_config <- shiny::reactive({
-        shiny::req(
-          do_plot(),
-          config()
-        )
+        shiny::req(config())
         if (!shiny::is.reactive(config)) stop("config is not reactive")
         validate_plotly_config(
           config(),
@@ -51,7 +46,7 @@ plotly_module_server <- function(
       })
 
       validated_data <- shiny::reactive({
-        shiny::req(data(), do_plot())
+        shiny::req(data())
         if (!shiny::is.reactive(data)) stop("data is not reactive")
         validate_plotly_data(data())
         return(data())

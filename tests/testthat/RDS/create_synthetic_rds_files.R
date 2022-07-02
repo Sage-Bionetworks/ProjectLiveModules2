@@ -92,4 +92,3 @@ saveRDS(
   ),
   "tests/testthat/RDS/data.rds"
 )
-

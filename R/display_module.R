@@ -1,8 +1,6 @@
 #' Display Module UI
 #'
 #' @param id A shiny id
-#'
-#' @export
 display_module_ui <- function(id) {
   ns <- shiny::NS(id)
 
@@ -20,15 +18,12 @@ display_module_ui <- function(id) {
 #' Display Module Server
 #'
 #' @param id A shiny id
-#' @param plot_config A shiny::reactive that returns a named list:
+#' @param config A shiny::reactive that returns a named list:
 #'  - "type": one of c("datatable", "barchart")
 #'  - "entity": a name in data
 #'  -  One of ("barchart", "datatable"). See barchart_module_server() and
 #'  datatable_module_server()
 #' @param data A shiny::reactive that returns a named list of data frames.
-
-#'
-#' @export
 display_module_server <- function(id, config, data) {
   shiny::moduleServer(
     id,
@@ -75,31 +70,45 @@ display_module_server <- function(id, config, data) {
         return(config)
       })
 
-      output$plot_module_ui <- shiny::renderUI({
-        if (plot_type() == "barchart") {
-          barchart_module_ui(ns("barchart"))
-        } else if (plot_type() == "piechart") {
-          plotly_module_ui(ns("piechart"))
-        } else if (plot_type() == "datatable") {
-          datatable_module_ui(ns("datatable"))
-        } else {
-          stop("Unrecognized plot type: ", plot_type())
-        }
+      plot_function_row <- shiny::reactive({
+        shiny::req(plot_type())
+        dplyr::filter(get_plot_function_table(), .data$plot_type == plot_type())
       })
 
-      barchart_module_server(
+      ui_module <- shiny::reactive({
+        shiny::req(plot_function_row())
+        column <- dplyr::pull(plot_function_row(), "display_ui_module")
+        return(column[[1]])
+      })
+
+      output$plot_module_ui <- shiny::renderUI({
+        shiny::req(ui_module())
+        ui_module()(id = ns(plot_type()))
+      })
+
+      plotly_module_server(
         "barchart",
-        plot_config,
-        selected_data,
-        shiny::reactive(plot_type() == "barchart")
+        config = plot_config,
+        data = selected_data,
+        plot_function = shiny::reactive(create_barchart),
+        required_config_attrbutes = shiny::reactive(
+          get_plot_attribute_config()$barchart$required
+        ),
+        optional_config_attributes = shiny::reactive(
+          get_plot_attribute_config()$barchart$optional
+        )
       )
       plotly_module_server(
         "piechart",
         config = plot_config,
         data = selected_data,
         plot_function = shiny::reactive(create_piechart),
-        required_config_attrbutes = shiny::reactive("label_attribute"),
-        do_plot = shiny::reactive(plot_type() == "piechart")
+        required_config_attrbutes = shiny::reactive(
+          get_plot_attribute_config()$piechart$required
+        ),
+        optional_config_attributes = shiny::reactive(
+          get_plot_attribute_config()$piechart$optional
+        )
       )
       datatable_module_server(
         "datatable",
