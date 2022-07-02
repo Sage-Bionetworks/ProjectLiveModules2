@@ -23,7 +23,7 @@ display_module_ui <- function(id) {
 #'  - "entity": a name in data
 #'  -  One of ("barchart", "datatable"). See barchart_module_server() and
 #'  datatable_module_server()
-#' @param data A shiny::reactive that returns a named list of data frames.
+#' @param data A shiny::reactive that returns a data frame.
 display_module_server <- function(id, config, data) {
   shiny::moduleServer(
     id,
@@ -40,16 +40,13 @@ display_module_server <- function(id, config, data) {
         if (!shiny::is.reactive(data)) stop("data is not reactive")
         data <- data()
         malformed_data <- any(
-          length(data) == 0,
-          is.null(names(data))
+          !tibble::is_tibble(data),
+          ncol(data) == 0,
+          nrow(data) == 0
+
         )
         if (malformed_data) stop("data is malformed")
-        return(data)
-      })
-
-      selected_data <- shiny::reactive({
-        shiny::req(validated_data(), validated_config())
-        purrr::pluck(validated_data(), validated_config()$entity)
+        return(data())
       })
 
       box_title <- shiny::reactive({
@@ -72,7 +69,7 @@ display_module_server <- function(id, config, data) {
 
       plot_function_row <- shiny::reactive({
         shiny::req(plot_type())
-        dplyr::filter(get_plot_function_table(), .data$plot_type == plot_type())
+        dplyr::filter(get_plot_table(), .data$plot_type == plot_type())
       })
 
       ui_module <- shiny::reactive({
@@ -86,35 +83,21 @@ display_module_server <- function(id, config, data) {
         ui_module()(id = ns(plot_type()))
       })
 
-      plotly_module_server(
-        "barchart",
-        config = plot_config,
-        data = selected_data,
-        plot_function = shiny::reactive(create_barchart),
-        required_config_attrbutes = shiny::reactive(
-          get_plot_attribute_config()$barchart$required
-        ),
-        optional_config_attributes = shiny::reactive(
-          get_plot_attribute_config()$barchart$optional
+      server_modules <- get_plot_table()$display_server_module
+      ids            <- get_plot_table()$plot_type
+
+      purrr::walk2(
+        server_modules,
+        ids,
+        ~do.call(
+          what = .x,
+          args = list(
+            "id" = .y,
+            data = data,
+            config = plot_config,
+            plot_type = shiny::reactive(.y)
+          )
         )
-      )
-      plotly_module_server(
-        "piechart",
-        config = plot_config,
-        data = selected_data,
-        plot_function = shiny::reactive(create_piechart),
-        required_config_attrbutes = shiny::reactive(
-          get_plot_attribute_config()$piechart$required
-        ),
-        optional_config_attributes = shiny::reactive(
-          get_plot_attribute_config()$piechart$optional
-        )
-      )
-      datatable_module_server(
-        "datatable",
-        plot_config,
-        selected_data,
-        shiny::reactive(plot_type() == "datatable")
       )
 
     }

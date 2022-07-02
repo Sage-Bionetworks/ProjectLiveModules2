@@ -4,16 +4,14 @@
 \alias{datatable_module_server}
 \title{Data Table Module UI}
 \usage{
-datatable_module_server(id, config, data, do_plot = shiny::reactive(TRUE))
+datatable_module_server(id, data, ...)
 }
 \arguments{
 \item{id}{A shiny id}
 
-\item{config}{A shiny::reactive that returns a list}
-
 \item{data}{A shiny::reactive that returns A data frame.}
 
-\item{do_plot}{A shiny::reactive that returns a logical.}
+\item{...}{unused arguments}
 }
 \description{
 Data Table Module UI

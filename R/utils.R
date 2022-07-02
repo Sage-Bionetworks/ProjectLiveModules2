@@ -1,28 +1,27 @@
-#' Get Plot Attribute Config
+#' Get Plot Table
 #'
-#' This config is used to validate plot configs
-get_plot_attribute_config <- function() {
-  jsonlite::read_json(system.file(
-    "configs",
-    "plot_attribute_config.json",
-    package = "ProjectLiveModules2"
-  ))
-}
-
-#' Get Plot Function Table
-#'
-#' This table has various plot used specifically for each plot type
-get_plot_function_table <- function() {
+#' This table has various data used specifically for each plot type
+get_plot_table <- function() {
   dplyr::tibble(
     "plot_type" = c("barchart", "piechart", "datatable"),
     "display_name" = c("Barchart", "Piechart", "Data Table"),
+    "required_attributes" = list(
+      list("x_attribute"),
+      list("label_attribute"),
+      list()
+    ),
+    "optional_attributes" = list(
+      list("color_attribute", "group_attribute"),
+      list(),
+      list()
+    ),
+    "plot_function" = list(create_barchart, create_piechart, NULL),
     "display_ui_module" = list(
       plotly_module_ui, plotly_module_ui, datatable_module_ui
     ),
     "display_server_module" = list(
       plotly_module_server, plotly_module_server, datatable_module_server
     ),
-    "plot_function" = list(create_barchart, create_piechart, NULL),
     "admin_ui_module" = list(
       admin_barchart_module_ui,
       admin_piechart_module_ui,

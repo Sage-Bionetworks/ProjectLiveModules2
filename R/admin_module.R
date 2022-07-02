@@ -78,7 +78,7 @@ admin_module_server <- function(id, data) {
         ui_label          = shiny::reactive("Select How to display items."),
         attribute_name    = shiny::reactive("type"),
         attribute_choices = shiny::reactive(
-          get_plot_function_table() %>%
+          get_plot_table() %>%
             dplyr::select("display_name", "plot_type") %>%
             tibble::deframe(.)
         )
@@ -89,7 +89,7 @@ admin_module_server <- function(id, data) {
       plot_function_row <- shiny::reactive({
         shiny::req(display_choice())
         dplyr::filter(
-          get_plot_function_table(),
+          get_plot_table(),
           .data$plot_type == display_choice()
         )
       })
@@ -113,8 +113,8 @@ admin_module_server <- function(id, data) {
       })
 
       plot_config_list <- {
-        ids       <- get_plot_function_table()$plot_type
-        functions <- get_plot_function_table()$admin_server_module
+        ids       <- get_plot_table()$plot_type
+        functions <- get_plot_table()$admin_server_module
         config_list <- purrr::map2(
             functions,
             ids,

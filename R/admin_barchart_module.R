@@ -32,8 +32,12 @@ admin_barchart_module_server <- function(id, data, input_config) {
       #TODO: replace this with schematic API call
       column_choices <- shiny::reactive({
         shiny::req(data())
-        choices <- colnames(data())
-        names <- stringr::str_to_title(colnames(data()))
+
+        choices <- data() %>%
+          dplyr::select_if(is.factor) %>%
+          colnames()
+
+        names <- stringr::str_to_title(choices)
         purrr::set_names(choices, names)
       })
 

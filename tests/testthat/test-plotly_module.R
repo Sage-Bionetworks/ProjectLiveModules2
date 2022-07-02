@@ -15,13 +15,15 @@ test_that("plotly_module_server", {
     args = list(
       "data" = shiny::reactive(data),
       "config" = shiny::reactive(config),
-      "plot_function" = shiny::reactive(create_piechart),
-      "required_config_attrbutes" = shiny::reactive("label_attribute")
+      "plot_type" = shiny::reactive("piechart")
     ),
     {
       session$setInputs("palette_choice" = "magma")
       expect_type(validated_config(), "list")
       expect_true(tibble::is_tibble(validated_data()))
+      expect_type(output$palette_ui, "list")
+      expect_type(plot_function(), "closure")
+      expect_type(plot(), "list")
       expect_type(output$plot, "character")
     }
   )

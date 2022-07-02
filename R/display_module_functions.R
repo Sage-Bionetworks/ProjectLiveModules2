@@ -15,7 +15,7 @@ validate_plot_config <- function(
   if (is.null(config[["name"]])) stop(error_prefix, "has no name")
   if (is.null(config[["entity"]])) stop(error_prefix, "has no entity")
   missing_plot_type <- !any(
-    names(get_plot_attribute_config()) %in% names(config)
+    get_plot_table()$plot_type %in% names(config)
   )
   if (missing_plot_type) stop(error_prefix, "missing an allowed plot type")
 }

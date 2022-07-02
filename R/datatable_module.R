@@ -11,20 +11,21 @@ datatable_module_ui <- function(id) {
 #' Data Table Module UI
 #'
 #' @param id A shiny id
-#' @param config A shiny::reactive that returns a list
 #' @param data A shiny::reactive that returns A data frame.
-#' @param do_plot A shiny::reactive that returns a logical.
+#' @param ... unused arguments
 #'
 #' @export
 datatable_module_server <- function(
-    id, config, data, do_plot = shiny::reactive(TRUE)
+    id,
+    data,
+    ...
 ) {
   shiny::moduleServer(
     id,
     function(input, output, session) {
 
       output$datatable <- DT::renderDataTable({
-        shiny::req(data(), do_plot())
+        shiny::req(data())
         data()
       })
 
