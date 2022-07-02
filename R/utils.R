@@ -1,3 +1,15 @@
+#' Get Plot Attribute Config
+#'
+#' This config is used to validate plot configs
+get_plot_attribute_config <- function(){
+  jsonlite::read_json(system.file(
+    "configs",
+    "plot_attribute_config.json",
+    package = "ProjectLiveModules2"
+  ))
+}
+
+
 #' Get Plot Type
 #'
 #' Determines the plot type from the config
