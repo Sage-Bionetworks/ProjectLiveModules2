@@ -18,21 +18,7 @@ admin_module_ui <- function(id) {
         attribute_sel_module_ui(ns("display_choice"))
       )
     ),
-    shiny::conditionalPanel(
-      condition = "output.display_choice == 'barchart'",
-      admin_barchart_module_ui(ns("barchart")),
-      ns = ns
-    ),
-    shiny::conditionalPanel(
-      condition = "output.display_choice == 'piechart'",
-      admin_piechart_module_ui(ns("piechart")),
-      ns = ns
-    ),
-    shiny::conditionalPanel(
-      condition = "output.display_choice == 'datatable'",
-      admin_datatable_module_ui(ns("datatable")),
-      ns = ns
-    ),
+    shiny::uiOutput(ns("admin_plot_module_ui")),
     display_module_ui(ns("display")),
     shiny::downloadButton(ns("download_json"), "Download JSON"),
   )
@@ -92,21 +78,32 @@ admin_module_server <- function(id, data) {
         ui_label          = shiny::reactive("Select How to display items."),
         attribute_name    = shiny::reactive("type"),
         attribute_choices = shiny::reactive(
-          c(
-            "Barchart" = "barchart",
-            "Piechart" = "piechart",
-            "Data Table" = "datatable"
-          )
+          get_plot_function_table() %>%
+            dplyr::select("display_name", "plot_type") %>%
+            tibble::deframe(.)
         )
       )
 
-      output$display_choice <- shiny::reactive(display_choice())
+      # select ui module ----
 
-      shiny::outputOptions(
-        output,
-        "display_choice",
-        suspendWhenHidden = FALSE
-      )
+      plot_function_row <- shiny::reactive({
+        shiny::req(display_choice())
+        dplyr::filter(
+          get_plot_function_table(),
+          .data$plot_type == display_choice()
+        )
+      })
+
+      ui_module <- shiny::reactive({
+        shiny::req(plot_function_row())
+        column <- dplyr::pull(plot_function_row(), "admin_ui_module")
+        return(column[[1]])
+      })
+
+      output$admin_plot_module_ui <- shiny::renderUI({
+        shiny::req(ui_module())
+        ui_module()(id = ns(display_choice()))
+      })
 
       # rest ----
 
@@ -115,64 +112,55 @@ admin_module_server <- function(id, data) {
         purrr::pluck(data(), entity_choice())
       })
 
-      barchart_config <- admin_barchart_module_server(
-        "barchart",
-        selected_data,
-        selected_input_config
-      )
-
-      piechart_config <- admin_piechart_module_server(
-        "piechart",
-        selected_data,
-        selected_input_config
-      )
-
-      datatable_config <- admin_datatable_module_server(
-        "datatable",
-        selected_input_config
-      )
+      plot_config_list <- {
+        ids       <- get_plot_function_table()$plot_type
+        functions <- get_plot_function_table()$admin_server_module
+        config_list <- purrr::map2(
+            functions,
+            ids,
+            ~do.call(
+              what = .x,
+              args = list(
+                "id" = .y,
+                data = selected_data,
+                input_config = selected_input_config
+              )
+            )
+          )
+        purrr::set_names(config_list, ids)
+      }
 
       plot_config <- shiny::reactive({
         shiny::req(display_choice())
-        if (display_choice() == "barchart") return(barchart_config())
-        else if (display_choice() == "piechart") return(piechart_config())
-        else if (display_choice() == "datatable") return(datatable_config())
+        plot_config_list[[display_choice()]]()
       })
 
       output_config <- shiny::reactive({
         shiny::req(
+          display_choice(),
           !is.null(entity_choice()),
           !is.null(input$name_choice),
           !is.null(plot_config())
         )
 
-        config <- list(
-          "entity" = entity_choice(),
-          "name" = input$name_choice
-        )
-        if (display_choice() == "barchart") {
-          config <- c(
-            config,
-            list("barchart" = plot_config())
+        config <-
+          list(
+            entity_choice(),
+            input$name_choice,
+            plot_config()
+          ) %>%
+          purrr::set_names(
+            "entity",
+            "name",
+            display_choice()
           )
-        } else if (display_choice() == "piechart") {
-          config <- c(
-            config,
-            list("piechart" = plot_config())
-          )
-        } else if (display_choice() == "datatable") {
-          config <- c(
-            config,
-            list("datatable" = plot_config())
-          )
-        }
         return(config)
       })
 
       display_module_server(
         id = "display",
         config = output_config,
-        data = data
+        data = selected_data
       )
 
       output$download_json <- shiny::downloadHandler(

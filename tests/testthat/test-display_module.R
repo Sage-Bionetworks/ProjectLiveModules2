@@ -30,6 +30,10 @@ test_that("display_module_server1", {
       expect_equal(box_title(), "Barchart 1")
       expect_equal(plot_type(), "barchart")
       expect_equal(plot_config(), list("x_attribute" = "initiative"))
+      expect_true(tibble::is_tibble(plot_function_row()))
+      expect_equal(plot_function_row()$plot_type, "barchart")
+      expect_equal(nrow(plot_function_row()), 1)
+      expect_type(ui_module(), "closure")
     }
   )
 })
@@ -46,6 +50,10 @@ test_that("display_module_server2", {
       expect_equal(box_title(), "Piechart 1")
       expect_equal(plot_type(), "piechart")
       expect_equal(plot_config(), list("label_attribute" = "initiative"))
+      expect_true(tibble::is_tibble(plot_function_row()))
+      expect_equal(plot_function_row()$plot_type, "piechart")
+      expect_equal(nrow(plot_function_row()), 1)
+      expect_type(ui_module(), "closure")
     }
   )
 })
@@ -62,6 +70,10 @@ test_that("display_module_server3", {
       expect_equal(box_title(), "Data Table 1")
       expect_equal(plot_type(), "datatable")
       expect_length(plot_config(), 0)
+      expect_true(tibble::is_tibble(plot_function_row()))
+      expect_equal(plot_function_row()$plot_type, "datatable")
+      expect_equal(nrow(plot_function_row()), 1)
+      expect_type(ui_module(), "closure")
     }
   )
 })

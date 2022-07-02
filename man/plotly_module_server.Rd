@@ -10,8 +10,7 @@ plotly_module_server(
   data,
   plot_function,
   required_config_attrbutes = shiny::reactive(c()),
-  optional_config_attributes = shiny::reactive(c()),
-  do_plot = shiny::reactive(TRUE)
+  optional_config_attributes = shiny::reactive(c())
 )
 }
 \arguments{
@@ -26,8 +25,6 @@ plotly_module_server(
 \item{required_config_attrbutes}{Attributes thatare required in the config}
 
 \item{optional_config_attributes}{Attributes that are allowed in the config}
-
-\item{do_plot}{A shiny::reactive that returns a logical.}
 }
 \description{
 Plotly Module Server

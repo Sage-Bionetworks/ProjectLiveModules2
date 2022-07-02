@@ -9,7 +9,7 @@
     },
     {
       "name":"Piechart 1",
-      "entity":"Studies",
+      "entity": "Files",
       "piechart": {
         "label_attribute":"initiative"
       }
