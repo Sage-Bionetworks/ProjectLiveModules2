@@ -1,8 +1,23 @@
+#' Create Plot Config
+#'
+#' @param attributes A named list
+#' @param plot_type A string
+create_plot_config <- function(attributes, plot_type) {
+  plot_table <- get_plot_table(plot_type)
+  required   <- unlist(plot_table$required_attributes)
+  optional   <- unlist(plot_table$optional_attributes)
+  attributes <- attributes[c(required, optional)] %>%
+    purrr::discard(., . == "none")
+}
+
+
 #' Get Plot Table
 #'
 #' This table has various data used specifically for each plot type
-get_plot_table <- function() {
-  dplyr::tibble(
+#'
+#' @param type A string
+get_plot_table <- function(type = NULL) {
+  table <- dplyr::tibble(
     "plot_type" = c("barchart", "piechart", "datatable"),
     "display_name" = c("Barchart", "Piechart", "Data Table"),
     "required_attributes" = list(
@@ -33,6 +48,10 @@ get_plot_table <- function() {
       admin_datatable_module_server
     )
   )
+  if (!is.null(type)) {
+    table <- dplyr::filter(table, .data$plot_type == type)
+  }
+  return(table)
 }
 
 

@@ -118,8 +118,8 @@ test_that("admin_barchart_module_server_with_group_and_color", {
         session$getReturned()(),
         list(
           "x_attribute" = "assay",
-          "group_attribute" = "file_format",
-          "color_attribute" = "year"
+          "color_attribute" = "year",
+          "group_attribute" = "file_format"
         )
       )
     }

@@ -10,8 +10,8 @@ data <-
 
 expected_barchart_config1 <-  list(
   "x_attribute" = "assay",
-  "group_attribute" = "year",
-  "color_attribute" = "file_format"
+  "color_attribute" = "file_format",
+  "group_attribute" = "year"
 )
 
 expected_barchart_config2 <-  list(

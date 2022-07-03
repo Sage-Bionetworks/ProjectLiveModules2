@@ -93,12 +93,18 @@ display_module_server <- function(id, config, data) {
           what = .x,
           args = list(
             "id" = .y,
-            data = data,
+            data = validated_data,
             config = plot_config,
             plot_type = shiny::reactive(.y)
           )
         )
       )
+
+      # this is to stop a lintr_object_usage warning
+      output$x <- shiny::renderText({
+        validated_data()
+        plot_config()
+      })
 
     }
   )

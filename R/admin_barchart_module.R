@@ -90,10 +90,13 @@ admin_barchart_module_server <- function(id, data, input_config) {
           color_attribute()
         )
 
-        create_barchart_config(
-          x_attribute(),
-          group_attribute(),
-          color_attribute()
+        create_plot_config(
+          attributes = list(
+            "x_attribute"     = x_attribute(),
+            "group_attribute" = group_attribute(),
+            "color_attribute" = color_attribute()
+          ),
+          plot_type = "barchart"
         )
       })
 

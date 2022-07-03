@@ -45,7 +45,10 @@ admin_piechart_module_server <- function(id, data, input_config) {
 
       output_config <- shiny::reactive({
         shiny::req(label_attribute())
-        create_piechart_config(label_attribute())
+        create_plot_config(
+          attributes = list("label_attribute" = label_attribute()),
+          plot_type = "piechart"
+        )
       })
 
       return(output_config)
