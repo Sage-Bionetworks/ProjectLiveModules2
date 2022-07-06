@@ -4,30 +4,18 @@
 \alias{plotly_module_server}
 \title{Plotly Module Server}
 \usage{
-plotly_module_server(
-  id,
-  config,
-  data,
-  plot_function,
-  required_config_attrbutes = shiny::reactive(c()),
-  optional_config_attributes = shiny::reactive(c()),
-  do_plot = shiny::reactive(TRUE)
-)
+plotly_module_server(id, data, config, plot_type, ...)
 }
 \arguments{
 \item{id}{A shiny id}
 
-\item{config}{A shiny::reactive that returns a named list}
-
 \item{data}{A shiny::reactive that returns A data frame.}
 
-\item{plot_function}{A function that plots the table}
+\item{config}{A shiny::reactive that returns a named list}
 
-\item{required_config_attrbutes}{Attributes thatare required in the config}
+\item{plot_type}{The type of plot, see get_plot_table()$plot_type}
 
-\item{optional_config_attributes}{Attributes that are allowed in the config}
-
-\item{do_plot}{A shiny::reactive that returns a logical.}
+\item{...}{unused arguments}
 }
 \description{
 Plotly Module Server

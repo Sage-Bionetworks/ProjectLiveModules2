@@ -45,11 +45,13 @@ admin_piechart_module_server <- function(id, data, input_config) {
 
       output_config <- shiny::reactive({
         shiny::req(label_attribute())
-        create_piechart_config(label_attribute())
+        config <-
+          list("label_attribute" = label_attribute()) %>%
+          purrr::discard(., . == "none")
+        return(config)
       })
 
       return(output_config)
-
     }
   )
 }

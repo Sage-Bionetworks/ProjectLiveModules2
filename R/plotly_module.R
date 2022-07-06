@@ -16,42 +16,40 @@ plotly_module_ui <- function(id) {
 #' @param id A shiny id
 #' @param data A shiny::reactive that returns A data frame.
 #' @param config A shiny::reactive that returns a named list
-#' @param plot_function A function that plots the table
-#' @param required_config_attrbutes Attributes thatare required in the config
-#' @param optional_config_attributes Attributes that are allowed in the config
-#' @param do_plot A shiny::reactive that returns a logical.
+#' @param ... unused arguments
+#' @param plot_type The type of plot, see get_plot_table()$plot_type
 #'
 #' @export
 plotly_module_server <- function(
     id,
-    config,
     data,
-    plot_function,
-    required_config_attrbutes = shiny::reactive(c()),
-    optional_config_attributes = shiny::reactive(c()),
-    do_plot = shiny::reactive(TRUE)
+    config,
+    plot_type,
+    ...
 ) {
   shiny::moduleServer(
     id,
     function(input, output, session) {
       ns <- session$ns
 
+      plot_table <- shiny::reactive({
+        shiny::req(plot_type())
+        dplyr::filter(get_plot_table(), .data$plot_type == plot_type())
+      })
+
       validated_config <- shiny::reactive({
-        shiny::req(
-          do_plot(),
-          config()
-        )
+        shiny::req(config())
         if (!shiny::is.reactive(config)) stop("config is not reactive")
         validate_plotly_config(
           config(),
-          required_config_attrbutes(),
-          optional_config_attributes()
+          unlist(plot_table()$required_attributes),
+          unlist(plot_table()$optional_attributes)
         )
         return(config())
       })
 
       validated_data <- shiny::reactive({
-        shiny::req(data(), do_plot())
+        shiny::req(data())
         if (!shiny::is.reactive(data)) stop("data is not reactive")
         validate_plotly_data(data())
         return(data())
@@ -63,6 +61,11 @@ plotly_module_server <- function(
           label    = "Select palette for plot",
           choices  = get_viridis_palette_options()
         )
+      })
+
+      plot_function <- shiny::reactive({
+        shiny::req(plot_table())
+        plot_table()$plot_function[[1]]
       })
 
       plot <- shiny::reactive({

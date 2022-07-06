@@ -4,7 +4,8 @@ test_that("display_module_ui", {
 
 data <-
   testthat::test_path("RDS", "data.rds") %>%
-  readRDS()
+  readRDS() %>%
+  purrr::pluck("Files")
 
 configs <-
   testthat::test_path("JSON", "test.json") %>%
@@ -26,10 +27,13 @@ test_that("display_module_server1", {
       expect_type(validated_config(), "list")
       expect_type(validated_data(), "list")
 
-      expect_true(tibble::is_tibble(selected_data()))
       expect_equal(box_title(), "Barchart 1")
       expect_equal(plot_type(), "barchart")
       expect_equal(plot_config(), list("x_attribute" = "initiative"))
+      expect_true(tibble::is_tibble(plot_function_row()))
+      expect_equal(plot_function_row()$plot_type, "barchart")
+      expect_equal(nrow(plot_function_row()), 1)
+      expect_type(ui_module(), "closure")
     }
   )
 })
@@ -42,10 +46,13 @@ test_that("display_module_server2", {
       "config" = shiny::reactive(config2)
     ),
     {
-      expect_true(tibble::is_tibble(selected_data()))
       expect_equal(box_title(), "Piechart 1")
       expect_equal(plot_type(), "piechart")
       expect_equal(plot_config(), list("label_attribute" = "initiative"))
+      expect_true(tibble::is_tibble(plot_function_row()))
+      expect_equal(plot_function_row()$plot_type, "piechart")
+      expect_equal(nrow(plot_function_row()), 1)
+      expect_type(ui_module(), "closure")
     }
   )
 })
@@ -58,10 +65,13 @@ test_that("display_module_server3", {
       "config" = shiny::reactive(config3)
     ),
     {
-      expect_true(tibble::is_tibble(selected_data()))
       expect_equal(box_title(), "Data Table 1")
       expect_equal(plot_type(), "datatable")
       expect_length(plot_config(), 0)
+      expect_true(tibble::is_tibble(plot_function_row()))
+      expect_equal(plot_function_row()$plot_type, "datatable")
+      expect_equal(nrow(plot_function_row()), 1)
+      expect_type(ui_module(), "closure")
     }
   )
 })

@@ -10,8 +10,8 @@ data <-
 
 expected_barchart_config1 <-  list(
   "x_attribute" = "assay",
-  "group_attribute" = "year",
-  "color_attribute" = "file_format"
+  "color_attribute" = "file_format",
+  "group_attribute" = "year"
 )
 
 expected_barchart_config2 <-  list(
@@ -47,7 +47,6 @@ test_that("admin_module_server_barchart_no_json_input", {
 
       # rest
       expect_true(tibble::is_tibble(selected_data()))
-      expect_equal(barchart_config(), expected_barchart_config1)
       expect_equal(plot_config(), expected_barchart_config1)
       expect_equal(output_config(), expected_barchart_config2)
     }
@@ -77,12 +76,16 @@ test_that("admin_module_server_barchart_with_json_input", {
       expect_equal(name_selection_default(), "Barchart 1")
       expect_type(output$name_selection_ui, "list")
 
-      expect_equal(display_choice(), "barchart")
       expect_equal(entity_choice(), "Files")
+      expect_equal(display_choice(), "barchart")
+      expect_true(tibble::is_tibble(plot_function_row()))
+      expect_equal(plot_function_row()$plot_type, "barchart")
+      expect_equal(nrow(plot_function_row()), 1)
+      expect_type(ui_module(), "closure")
+
 
       # rest
       expect_true(tibble::is_tibble(selected_data()))
-      expect_equal(barchart_config(), expected_barchart_config1)
       expect_equal(plot_config(), expected_barchart_config1)
       expect_equal(output_config(), expected_barchart_config2)
     }
@@ -120,10 +123,13 @@ test_that("admin_module_server_piechart_with_json_input", {
 
       expect_equal(display_choice(), "piechart")
       expect_equal(entity_choice(), "Files")
+      expect_true(tibble::is_tibble(plot_function_row()))
+      expect_equal(plot_function_row()$plot_type, "piechart")
+      expect_equal(nrow(plot_function_row()), 1)
+      expect_type(ui_module(), "closure")
 
       # rest
       expect_true(tibble::is_tibble(selected_data()))
-      expect_equal(piechart_config(), expected_piechart_config1)
       expect_equal(plot_config(), expected_piechart_config1)
       expect_equal(output_config(), expected_piechart_config2)
     }
@@ -155,10 +161,13 @@ test_that("admin_module_server_datatable_with_json_input", {
       # other input
       expect_equal(display_choice(), "datatable")
       expect_equal(entity_choice(), "Files")
+      expect_true(tibble::is_tibble(plot_function_row()))
+      expect_equal(plot_function_row()$plot_type, "datatable")
+      expect_equal(nrow(plot_function_row()), 1)
+      expect_type(ui_module(), "closure")
 
       # rest
       expect_true(tibble::is_tibble(selected_data()))
-      expect_equal(datatable_config(), expected_datatable_config1)
       expect_equal(plot_config(), expected_datatable_config1)
       expect_equal(output_config(), expected_datatable_config2)
     }

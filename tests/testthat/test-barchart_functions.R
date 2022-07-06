@@ -3,30 +3,6 @@ data <-
   readRDS() %>%
   purrr::pluck("Files")
 
-test_that("create_barchart_config", {
-  expect_equal(
-    create_barchart_config("assay", "none", "none"),
-    list("x_attribute" = "assay")
-  )
-
-  expect_equal(
-    create_barchart_config("assay", "file", "none"),
-    list(
-      "x_attribute" = "assay",
-      "group_attribute" = "file"
-    )
-  )
-
-  expect_equal(
-    create_barchart_config("assay",  "none", "file"),
-    list(
-      "x_attribute" = "assay",
-      "color_attribute" = "file"
-    )
-  )
-
-})
-
 
 test_that("create_standard_barchart", {
   fig <- create_standard_barchart(
