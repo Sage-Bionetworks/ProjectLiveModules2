@@ -90,14 +90,14 @@ admin_barchart_module_server <- function(id, data, input_config) {
           color_attribute()
         )
 
-        create_plot_config(
-          attributes = list(
+        config <-
+          list(
             "x_attribute"     = x_attribute(),
-            "group_attribute" = group_attribute(),
-            "color_attribute" = color_attribute()
-          ),
-          plot_type = "barchart"
-        )
+            "color_attribute" = color_attribute(),
+            "group_attribute" = group_attribute()
+          ) %>%
+          purrr::discard(., . == "none")
+        return(config)
       })
 
       return(output_config)

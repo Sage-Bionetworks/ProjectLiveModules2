@@ -1,14 +1,3 @@
-#' Create Plot Config
-#'
-#' @param attributes A named list
-#' @param plot_type A string
-create_plot_config <- function(attributes, plot_type) {
-  plot_table <- get_plot_table(plot_type)
-  required   <- unlist(plot_table$required_attributes)
-  optional   <- unlist(plot_table$optional_attributes)
-  attributes <- attributes[c(required, optional)] %>%
-    purrr::discard(., . == "none")
-}
 
 
 #' Get Plot Table
