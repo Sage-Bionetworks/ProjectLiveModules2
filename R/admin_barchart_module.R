@@ -32,8 +32,12 @@ admin_barchart_module_server <- function(id, data, input_config) {
       #TODO: replace this with schematic API call
       column_choices <- shiny::reactive({
         shiny::req(data())
-        choices <- colnames(data())
-        names <- stringr::str_to_title(colnames(data()))
+
+        choices <- data() %>%
+          dplyr::select_if(is.factor) %>%
+          colnames()
+
+        names <- stringr::str_to_title(choices)
         purrr::set_names(choices, names)
       })
 
@@ -86,11 +90,14 @@ admin_barchart_module_server <- function(id, data, input_config) {
           color_attribute()
         )
 
-        create_barchart_config(
-          x_attribute(),
-          group_attribute(),
-          color_attribute()
-        )
+        config <-
+          list(
+            "x_attribute"     = x_attribute(),
+            "color_attribute" = color_attribute(),
+            "group_attribute" = group_attribute()
+          ) %>%
+          purrr::discard(., . == "none")
+        return(config)
       })
 
       return(output_config)

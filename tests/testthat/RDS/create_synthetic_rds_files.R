@@ -12,11 +12,11 @@ date_estimates <- seq(
   by = "5 month"
 )
 
-assays       <- c("Assay1", "Assay2", "Assay3", NA)
-species      <- c("Species1", "Species2", NA)
-initiatives  <- c("Initiative1", "Initiative2")
-access_types <- c("Public", "Private", NA)
-file_formats <- c("jpg", "csv", "tsv")
+assays       <- forcats::as_factor(c("Assay1", "Assay2", "Assay3", NA))
+species      <- forcats::as_factor(c("Species1", "Species2", NA))
+initiatives  <- forcats::as_factor(c("Initiative1", "Initiative2"))
+access_types <- forcats::as_factor(c("Public", "Private", NA))
+file_formats <- forcats::as_factor(c("jpg", "csv", "tsv"))
 milestones   <- c(1L, 2L, 3L)
 
 n_studies <- 10
@@ -35,8 +35,8 @@ study_ids <- c(studies$study_id, "SX", NA)
 n_files      <- 1000
 
 files <- dplyr::tibble(
-  "file_name"   = stringr::str_c("File", as.character(1:n_files)),
-  "file_id"     = stringr::str_c("F", as.character(1:n_files)),
+  "name"        = stringr::str_c("File", as.character(1:n_files)),
+  "id"          = stringr::str_c("syn", as.character(1:n_files)),
   "study_id"    = sample(study_ids, n_files,  replace = TRUE),
   "species"     = sample(species, n_files,  replace = TRUE),
   "assay"       = sample(assays, n_files,  replace = TRUE),
@@ -55,8 +55,8 @@ files <- dplyr::tibble(
 n_pubs      <- 1000
 
 publications <- dplyr::tibble(
-  "publication_name" = stringr::str_c("File", as.character(1:n_pubs)),
-  "publication_id"   = stringr::str_c("F", as.character(1:n_pubs)),
+  "name"             = stringr::str_c("File", as.character(1:n_pubs)),
+  "id"               = stringr::str_c("syn", as.character(1:n_pubs)),
   "study_id"         = sample(study_ids, n_pubs,  replace = TRUE),
   "assay"            = sample(assays, n_pubs,  replace = TRUE),
   "date"             = sample(dates, n_pubs,  replace = TRUE)
@@ -68,15 +68,24 @@ publications <- dplyr::tibble(
 n_tools <- 20
 
 tools <- dplyr::tibble(
-  "study_id"  = sample(study_ids, n_tools,  replace = TRUE),
-  "tool_name" = stringr::str_c("Tool", as.character(1:n_tools)),
-  "tool_id"   = stringr::str_c("T", as.character(1:n_tools)),
-)
+  "study_id" = sample(study_ids, n_tools,  replace = TRUE),
+  "name"     = stringr::str_c("Tool", as.character(1:n_tools)),
+  "id"       = stringr::str_c("syn", as.character(1:n_tools)),
+  "date"     = sample(dates, n_tools,  replace = TRUE)
+) %>%
+  dplyr::mutate("year" = lubridate::year(.data$date)) %>%
+  dplyr::mutate("year" = as.factor(.data$year))
+
+
+all_files <-
+  dplyr::bind_rows(files, publications, tools) %>%
+  dplyr::select("id", "name", "date", "year")
+
 
 
 saveRDS(
   list(
-    "Studies" = studies,
+    "All Files" = all_files,
     "Files" = files,
     "Publications" = publications,
     "Tools" = tools

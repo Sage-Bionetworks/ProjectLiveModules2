@@ -15,7 +15,7 @@ display_module_server(id, config, data)
 -  One of ("barchart", "datatable"). See barchart_module_server() and
 datatable_module_server()}
 
-\item{data}{A shiny::reactive that returns a named list of data frames.}
+\item{data}{A shiny::reactive that returns a data frame.}
 }
 \description{
 Display Module Server

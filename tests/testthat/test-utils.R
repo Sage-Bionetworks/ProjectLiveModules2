@@ -1,3 +1,9 @@
+test_that("get_plot_table", {
+  expect_true(tibble::is_tibble(get_plot_table()))
+  expect_true(nrow(get_plot_table()) > 1)
+  expect_true(nrow(get_plot_table("barchart")) == 1)
+})
+
 test_that("get_value_from_list", {
   lst <- list("name" = "value")
 

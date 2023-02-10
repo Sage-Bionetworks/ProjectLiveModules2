@@ -1,3 +1,49 @@
+
+
+#' Get Plot Table
+#'
+#' This table has various data used specifically for each plot type
+#'
+#' @param type A string
+get_plot_table <- function(type = NULL) {
+  table <- dplyr::tibble(
+    "plot_type" = c("barchart", "piechart", "datatable"),
+    "display_name" = c("Barchart", "Piechart", "Data Table"),
+    "required_attributes" = list(
+      list("x_attribute"),
+      list("label_attribute"),
+      list()
+    ),
+    "optional_attributes" = list(
+      list("color_attribute", "group_attribute"),
+      list(),
+      list()
+    ),
+    "plot_function" = list(create_barchart, create_piechart, NULL),
+    "display_ui_module" = list(
+      plotly_module_ui, plotly_module_ui, datatable_module_ui
+    ),
+    "display_server_module" = list(
+      plotly_module_server, plotly_module_server, datatable_module_server
+    ),
+    "admin_ui_module" = list(
+      admin_barchart_module_ui,
+      admin_piechart_module_ui,
+      admin_datatable_module_ui
+    ),
+    "admin_server_module" = list(
+      admin_barchart_module_server,
+      admin_piechart_module_server,
+      admin_datatable_module_server
+    )
+  )
+  if (!is.null(type)) {
+    table <- dplyr::filter(table, .data$plot_type == type)
+  }
+  return(table)
+}
+
+
 #' Get Plot Type
 #'
 #' Determines the plot type from the config
